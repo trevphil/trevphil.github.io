@@ -1,0 +1,794 @@
+<!DOCTYPE html><html><head></head><body><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Complete failure</th>
+      <td>1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td>A link to a "debug image" comparing ground truth vs. estimated depth. Coloring is based on z-coordinate in camera frame, NOT ray length from camera to surface, and is scaled by the overall (min, max) z-coordinate from estimated and ground truth points.</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td>A link to a "debug image" from the stereo algorithm, this is specific and different for each algorithm.</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>Calculated by projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, and calculating how many pixels are filled</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>The fraction of estimated points with an error below 4 cm. Based on estimated vs. true ray length from camera origin to surface.</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>1 - (fraction of inlier px)</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>Defined as (estimated depth - true depth) / true depth. Based on estimated vs. true ray length from camera origin to surface.</td>
+    </tr>
+    <tr>
+      <th>Max abs. error</th>
+      <td>Maximum error in meters of any point estimate. Based on estimated vs. true ray length from camera origin to surface.</td>
+    </tr>
+    <tr>
+      <th>Median abs. error</th>
+      <td>Median error in meters of any point estimate. Based on estimated vs. true ray length from camera origin to surface.</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>(fraction of outlier px) / (fraction of inlier px), i.e. How many outliers for each inlier?</td>
+    </tr>
+    <tr>
+      <th>RMSE</th>
+      <td>Root mean squared error of estimated vs. ground truth depth. Based on estimated vs. true ray length from camera origin to surface.</td>
+    </tr>
+  </tbody>
+</table><hr/><br/><p><b>Planar (Image Pair)</b></p><br/><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Flow Tracking</th>
+      <th>EPL Search (LSD-SLAM variant)</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>OpenCV Block Matching</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">Move 6 DoF</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.839365</td>
+      <td>-</td>
+      <td>0.712676</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.699401</td>
+      <td>-</td>
+      <td>0.381613</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.300599</td>
+      <td>-</td>
+      <td>0.618387</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.005901</td>
+      <td>-</td>
+      <td>0.012295</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.60798</td>
+      <td>-</td>
+      <td>7.01525</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.024842</td>
+      <td>-</td>
+      <td>0.053409</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.429795</td>
+      <td>-</td>
+      <td>1.62046</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.057073</td>
+      <td>-</td>
+      <td>0.124293</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move Toward Ground</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move Toward Ground/depth/0.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move Toward Ground/debug/0.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.835049</td>
+      <td>0.598822</td>
+      <td>0.644694</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.598448</td>
+      <td>0.101177</td>
+      <td>0.341308</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.401552</td>
+      <td>0.898823</td>
+      <td>0.658692</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.007134</td>
+      <td>0.130422</td>
+      <td>0.014002</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>0.43211</td>
+      <td>49.2082</td>
+      <td>2.64965</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.031931</td>
+      <td>0.216111</td>
+      <td>0.061414</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.670989</td>
+      <td>8.88363</td>
+      <td>1.92991</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.053829</td>
+      <td>2.65856</td>
+      <td>0.11461</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move x-axis</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.858086</td>
+      <td>0.673991</td>
+      <td>0.833229</td>
+      <td>0.922292</td>
+      <td>0.637256</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.971832</td>
+      <td>0</td>
+      <td>0.293404</td>
+      <td>0.334806</td>
+      <td>0.319311</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.028168</td>
+      <td>1</td>
+      <td>0.706596</td>
+      <td>0.665194</td>
+      <td>0.680689</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.002725</td>
+      <td>0.139252</td>
+      <td>0.00919</td>
+      <td>0.007948</td>
+      <td>0.009009</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>0.411262</td>
+      <td>41.1455</td>
+      <td>0.29856</td>
+      <td>1.2932</td>
+      <td>0.330071</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.014873</td>
+      <td>0.090187</td>
+      <td>0.056143</td>
+      <td>0.047129</td>
+      <td>0.054509</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.028985</td>
+      <td>inf</td>
+      <td>2.40827</td>
+      <td>1.9868</td>
+      <td>2.13174</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.020182</td>
+      <td>3.7748</td>
+      <td>0.059641</td>
+      <td>0.054513</td>
+      <td>0.055967</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move y-axis</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.859329</td>
+      <td>0.615345</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.947073</td>
+      <td>0</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.052927</td>
+      <td>1</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.002749</td>
+      <td>0.200617</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>0.161319</td>
+      <td>41.4285</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.013833</td>
+      <td>0.092165</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.055884</td>
+      <td>inf</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.021071</td>
+      <td>4.57912</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table><hr/><br/><p><b>Structure3D (Image Pair)</b></p><br/><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Flow Tracking</th>
+      <th>EPL Search (LSD-SLAM variant)</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>OpenCV Block Matching</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">Move 6 DoF</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.835303</td>
+      <td>-</td>
+      <td>0.712187</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.607412</td>
+      <td>-</td>
+      <td>0.358669</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.392588</td>
+      <td>-</td>
+      <td>0.641331</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.013294</td>
+      <td>-</td>
+      <td>0.016555</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.15989</td>
+      <td>-</td>
+      <td>2.22297</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.029604</td>
+      <td>-</td>
+      <td>0.057537</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.646329</td>
+      <td>-</td>
+      <td>1.78809</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.162195</td>
+      <td>-</td>
+      <td>0.160816</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move Toward Ground</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move Toward Ground/depth/0.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move Toward Ground/debug/0.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.828167</td>
+      <td>0.58346</td>
+      <td>0.642546</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.478063</td>
+      <td>0.096076</td>
+      <td>0.315401</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.521937</td>
+      <td>0.903924</td>
+      <td>0.684599</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.014352</td>
+      <td>0.169051</td>
+      <td>0.018981</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.26417</td>
+      <td>48.3728</td>
+      <td>4.16021</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.042353</td>
+      <td>0.228765</td>
+      <td>0.066703</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>1.09177</td>
+      <td>9.40846</td>
+      <td>2.17057</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.140747</td>
+      <td>3.09363</td>
+      <td>0.197315</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move x-axis</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.855661</td>
+      <td>0.66179</td>
+      <td>0.828281</td>
+      <td>0.880482</td>
+      <td>0.634727</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.877107</td>
+      <td>0.006797</td>
+      <td>0.279865</td>
+      <td>0.313704</td>
+      <td>0.301419</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.122893</td>
+      <td>0.993203</td>
+      <td>0.720135</td>
+      <td>0.686296</td>
+      <td>0.698581</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.009623</td>
+      <td>0.222506</td>
+      <td>0.01085</td>
+      <td>0.009628</td>
+      <td>0.010885</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.2917</td>
+      <td>41.7874</td>
+      <td>1.161</td>
+      <td>1.41476</td>
+      <td>1.35876</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.014821</td>
+      <td>0.092233</td>
+      <td>0.057246</td>
+      <td>0.048574</td>
+      <td>0.055575</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.140112</td>
+      <td>146.122</td>
+      <td>2.57316</td>
+      <td>2.18771</td>
+      <td>2.31765</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.158806</td>
+      <td>4.72319</td>
+      <td>0.084572</td>
+      <td>0.084594</td>
+      <td>0.081685</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move y-axis</th>
+      <th>Complete failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Flow Tracking/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (LSD-SLAM variant)/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.856803</td>
+      <td>0.6436</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.873056</td>
+      <td>0.005667</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.126944</td>
+      <td>0.994333</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.009096</td>
+      <td>0.237255</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.36394</td>
+      <td>41.7636</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.014352</td>
+      <td>0.093186</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.145402</td>
+      <td>175.457</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.154063</td>
+      <td>4.90186</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table></body></html>
