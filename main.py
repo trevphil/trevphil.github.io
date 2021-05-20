@@ -1,6 +1,6 @@
 import os
 import sys
-import cv2
+import shutil
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -41,12 +41,19 @@ def parse_stats(filepath):
   return stats
 
 
-if len(sys.argv) > 1:
-  basepath = Path(sys.argv[1])
-else:
-  basepath = Path('/tmp/sfm_results')
-print(f'Reading results from "{basepath}"')
+if not os.path.exists('/tmp/sfm_results'):
+  print('"/tmp/sfm_results" not found!')
+  exit()
 
+if os.path.exists('./sfm_results'):
+  response = input('Delete existing results? [y/n] ')
+  if response != 'y':
+    exit()
+  shutil.rmtree('./sfm_results')
+
+shutil.copytree('/tmp/sfm_results', './sfm_results')
+
+basepath = Path('./sfm_results')
 stereo_method_dirs = get_subdirectories(basepath)
 if len(stereo_method_dirs) == 0:
   print('No stereo methods found!')
