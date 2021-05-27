@@ -1,8 +1,8 @@
 complete_failure:0
-frac_estimated:0.496338
+frac_estimated:0.496331
 rmse:0.357931
-median_error:0.172106
-max_error:12.994969
+median_error:0.172109
+max_error:12.995074
 mean_relative_error:0.039636
 frac_inliers:0.126766
 frac_outliers:0.873234
