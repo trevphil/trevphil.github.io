@@ -51,6 +51,145 @@
       <td>Root mean squared error of estimated vs. ground truth depth. Based on estimated vs. true ray length from camera origin to surface.</td>
     </tr>
   </tbody>
+</table><hr/><br/><p><b>Full Sequence</b></p><br/><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Patch Match NCC)</th>
+      <th>EPL Search (Patch Match SSD)</th>
+      <th>EPL Search (Patch Match ZM-SSD)</th>
+      <th>Farneback Optical Flow</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>OpenCV Block Matching</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">AirSim</th>
+      <th>Complete failure</th>
+      <td>0.0582096</td>
+      <td>0.723003</td>
+      <td>0.648334</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.182658</td>
+      <td>0.181052</td>
+    </tr>
+    <tr>
+      <th>Debug depth</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.422433</td>
+      <td>0.154266</td>
+      <td>0.260802</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.64728</td>
+      <td>0.618278</td>
+    </tr>
+    <tr>
+      <th>Fraction of inlier px</th>
+      <td>0.379079</td>
+      <td>0.561186</td>
+      <td>0.547016</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.812917</td>
+      <td>0.795736</td>
+    </tr>
+    <tr>
+      <th>Fraction of outlier px</th>
+      <td>0.620921</td>
+      <td>0.438814</td>
+      <td>0.452984</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.187083</td>
+      <td>0.204264</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.0135614</td>
+      <td>0.00778108</td>
+      <td>0.00854425</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.00493079</td>
+      <td>0.0199612</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>5.31491</td>
+      <td>6.49124</td>
+      <td>5.98254</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>2105.21</td>
+      <td>2015.99</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.051237</td>
+      <td>0.034882</td>
+      <td>0.036879</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.0138955</td>
+      <td>0.0174595</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>1.63797</td>
+      <td>0.78194</td>
+      <td>0.8281</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.230137</td>
+      <td>0.256698</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0969983</td>
+      <td>0.0694239</td>
+      <td>0.114202</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.0431885</td>
+      <td>1.25506</td>
+    </tr>
+  </tbody>
 </table><hr/><br/><p><b>Planar (Image Pair)</b></p><br/><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1059,145 +1198,6 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
-    </tr>
-  </tbody>
-</table><hr/><br/><p><b>Full Sequence</b></p><br/><table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Dense KLT Optical Flow</th>
-      <th>EPL Search (Patch Match NCC)</th>
-      <th>EPL Search (Patch Match SSD)</th>
-      <th>EPL Search (Patch Match ZM-SSD)</th>
-      <th>Farneback Optical Flow</th>
-      <th>Generalized Rectification</th>
-      <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="11" valign="top">AirSim</th>
-      <th>Complete failure</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.182658</td>
-      <td>0.181052</td>
-    </tr>
-    <tr>
-      <th>Debug depth</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Debug stereo</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction estimated px</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.64728</td>
-      <td>0.618278</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.812917</td>
-      <td>0.795736</td>
-    </tr>
-    <tr>
-      <th>Fraction of outlier px</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.187083</td>
-      <td>0.204264</td>
-    </tr>
-    <tr>
-      <th>G.T. relative error</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.00493079</td>
-      <td>0.0199612</td>
-    </tr>
-    <tr>
-      <th>Max abs. error [m]</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>2105.21</td>
-      <td>2015.99</td>
-    </tr>
-    <tr>
-      <th>Median abs. error [m]</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.0138955</td>
-      <td>0.0174595</td>
-    </tr>
-    <tr>
-      <th>Outliers / inliers</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.230137</td>
-      <td>0.256698</td>
-    </tr>
-    <tr>
-      <th>RMSE [m]</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.0431885</td>
-      <td>1.25506</td>
     </tr>
   </tbody>
 </table></body></html>
