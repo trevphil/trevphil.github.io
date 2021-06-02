@@ -34,10 +34,11 @@ def render_html(test_sets):
   for test_set_name, df in test_sets.items():
     html += f"<hr/><br/><p><b>{test_set_name}</b></p><br/>"
     html += df.to_html(escape=False)
+  html += '<hr/><br/><img src="success.jpg" alt="">'
   html += "</body></html>"
 
   output_file = 'index.html'
   with open(output_file, 'w') as f:
     f.write(html)
-  
+
   webbrowser.open('file://' + os.path.realpath(output_file))

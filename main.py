@@ -138,7 +138,17 @@ def make_dataframe():
   return df
 
 
+def get_failure_by_index(stats_files):
+  did_fail = dict()
+  for stats_file in stats_files:
+    idx = int(stats_file.parts[-1].split('.')[0])
+    stats = parse_stats_file(stats_file)
+    did_fail[idx] = int(stats['complete_failure'])
+  return did_fail
+
+
 test_sets = defaultdict(lambda: make_dataframe())
+failure_per_method = dict()
 
 for test_dir in test_dirs:
   stats_files = get_files(test_dir / 'stats')
@@ -170,6 +180,9 @@ for test_dir in test_dirs:
   if len(depth_image_files) == 1:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
+  if len(stats_files) > 1:
+    failure_per_method[stereo_method] = get_failure_by_index(stats_files)
+
 
 # Remove (outer) rows in each dataframe which have no data
 all_motions = set([t.parts[-1] for t in test_dirs])
@@ -180,6 +193,29 @@ for test_set_name, df in test_sets.items():
       df = df.drop(m, level=0)
   test_sets[test_set_name] = df
 
+
+if len(failure_per_method) > 0:
+  indices = set()
+  for method, did_fail in failure_per_method.items():
+    indices = set(did_fail.keys()).union(indices)
+  tmax = int(np.max(list(indices))) + 1
+
+  fig, axs = plt.subplots(len(failure_per_method), 1,
+                          figsize=(15, 8))
+  i = 0
+
+  for method, did_fail in failure_per_method.items():
+    successes = np.zeros(tmax, dtype=np.uint8)
+    for idx, failed in did_fail.items():
+      successes[int(idx)] = 1 - int(failed)
+    axs[i].plot(successes, label=method)
+    axs[i].legend()
+    axs[i].set_xlabel('Image sequence number')
+    axs[i].set_ylabel('Success?')
+    i += 1
+
+  plt.tight_layout()
+  plt.savefig('success.jpg')
 
 render_html(test_sets)
 print('Done.')
