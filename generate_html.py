@@ -35,6 +35,7 @@ def render_html(test_sets):
     html += f"<hr/><br/><p><b>{test_set_name}</b></p><br/>"
     html += df.to_html(escape=False)
   html += '<hr/><br/><img src="success.jpg" alt="">'
+  html += '<hr/><br/><img src="rmse.jpg" alt="">'
   html += "</body></html>"
 
   output_file = 'index.html'

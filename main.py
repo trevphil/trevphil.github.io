@@ -138,17 +138,22 @@ def make_dataframe():
   return df
 
 
-def get_failure_by_index(stats_files):
+def get_stats_through_time(stats_files):
   did_fail = dict()
+  rmse = dict()
   for stats_file in stats_files:
     idx = int(stats_file.parts[-1].split('.')[0])
     stats = parse_stats_file(stats_file)
-    did_fail[idx] = int(stats['complete_failure'])
-  return did_fail
+    failed = int(stats['complete_failure'])
+    did_fail[idx] = failed
+    if failed == 0:
+      rmse[idx] = stats['rmse']
+  return did_fail, rmse
 
 
 test_sets = defaultdict(lambda: make_dataframe())
 failure_per_method = dict()
+rmse_per_method = dict()
 
 for test_dir in test_dirs:
   stats_files = get_files(test_dir / 'stats')
@@ -181,7 +186,9 @@ for test_dir in test_dirs:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
   if len(stats_files) > 1:
-    failure_per_method[stereo_method] = get_failure_by_index(stats_files)
+    failures, rmse_errors = get_stats_through_time(stats_files)
+    failure_per_method[stereo_method] = failures
+    rmse_per_method[stereo_method] = rmse_errors
 
 
 # Remove (outer) rows in each dataframe which have no data
@@ -201,7 +208,7 @@ if len(failure_per_method) > 0:
   tmax = int(np.max(list(indices))) + 1
 
   fig, axs = plt.subplots(len(failure_per_method), 1,
-                          figsize=(15, 8))
+                          figsize=(10, 7))
   i = 0
 
   for method, did_fail in failure_per_method.items():
@@ -212,10 +219,25 @@ if len(failure_per_method) > 0:
     axs[i].legend()
     axs[i].set_xlabel('Image sequence number')
     axs[i].set_ylabel('Success?')
+    axs[i].set_yticks([0, 1])
     i += 1
 
   plt.tight_layout()
   plt.savefig('success.jpg')
+
+  max_rmse = 1.0
+
+  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+  for method, rmse in rmse_per_method.items():
+    rmse_errors = np.zeros(tmax, dtype=float) * np.nan
+    for idx, e in rmse.items():
+      rmse_errors[int(idx)] = min(e, max_rmse)
+    ax.plot(rmse_errors, label=method)
+  ax.legend()
+  ax.set_xlabel('Image sequence number')
+  ax.set_ylabel('RMSE [m]')
+  plt.savefig('rmse.jpg')
+
 
 render_html(test_sets)
 print('Done.')
