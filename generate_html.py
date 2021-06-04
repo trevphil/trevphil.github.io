@@ -13,8 +13,8 @@ def info_table():
     'Debug depth': 'A link to a "debug image" comparing ground truth vs. estimated depth. Coloring is based on z-coordinate in camera frame, NOT ray length from camera to surface, and is scaled by the overall (min, max) z-coordinate from estimated and ground truth points.',
     'Debug stereo': 'A link to a "debug image" from the stereo algorithm, this is specific and different for each algorithm.',
     'Fraction estimated px': 'Calculated by projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, and calculating how many pixels are filled',
-    'Fraction of inlier px': 'The fraction of estimated points with an error below 4 cm. Based on estimated vs. true ray length from camera origin to surface.',
-    'Fraction of outlier px': '1 - (fraction of inlier px)',
+    'Fraction inliers': 'The fraction of estimated points with an error below 6 cm. Based on estimated vs. true ray length from camera origin to surface.',
+    'Fraction outliers': '1 - (fraction of inliers)',
     'G.T. relative error': 'Defined as (estimated depth - true depth) / true depth. Based on estimated vs. true ray length from camera origin to surface.',
     'Max abs. error': 'Maximum error in meters of any point estimate. Based on estimated vs. true ray length from camera origin to surface.',
     'Median abs. error': 'Median error in meters of any point estimate. Based on estimated vs. true ray length from camera origin to surface.',
@@ -36,6 +36,7 @@ def render_html(test_sets):
     html += df.to_html(escape=False)
   html += '<hr/><br/><img src="success.jpg" alt="">'
   html += '<hr/><br/><img src="rmse.jpg" alt="">'
+  html += '<hr/><br/><img src="outliers.jpg" alt="">'
   html += "</body></html>"
 
   output_file = 'index.html'

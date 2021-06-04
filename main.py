@@ -59,8 +59,8 @@ def parse_stats(stats_files):
   key2name = {
     'complete_failure': 'Complete failure',
     'frac_estimated': 'Fraction estimated px',
-    'frac_inliers': 'Fraction of inlier px',
-    'frac_outliers': 'Fraction of outlier px',
+    'frac_inliers': 'Fraction inliers (error < 6 cm)',
+    'frac_outliers': 'Fraction outliers (error >= 6 cm)',
     'outliers_over_inliers': 'Outliers / inliers',
     'max_error': 'Max abs. error [m]',
     'median_error': 'Median abs. error [m]',
@@ -141,6 +141,7 @@ def make_dataframe():
 def get_stats_through_time(stats_files):
   did_fail = dict()
   rmse = dict()
+  outliers = dict()
   for stats_file in stats_files:
     idx = int(stats_file.parts[-1].split('.')[0])
     stats = parse_stats_file(stats_file)
@@ -148,12 +149,14 @@ def get_stats_through_time(stats_files):
     did_fail[idx] = failed
     if failed == 0:
       rmse[idx] = stats['rmse']
-  return did_fail, rmse
+      outliers[idx] = stats['frac_outliers']
+  return did_fail, rmse, outliers
 
 
 test_sets = defaultdict(lambda: make_dataframe())
 failure_per_method = dict()
 rmse_per_method = dict()
+frac_outliers_per_method = dict()
 
 for test_dir in test_dirs:
   stats_files = get_files(test_dir / 'stats')
@@ -186,9 +189,10 @@ for test_dir in test_dirs:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
   if len(stats_files) > 1:
-    failures, rmse_errors = get_stats_through_time(stats_files)
+    failures, rmse_errors, outliers = get_stats_through_time(stats_files)
     failure_per_method[stereo_method] = failures
     rmse_per_method[stereo_method] = rmse_errors
+    frac_outliers_per_method[stereo_method] = outliers
 
 
 # Remove (outer) rows in each dataframe which have no data
@@ -237,6 +241,17 @@ if len(failure_per_method) > 0:
   ax.set_xlabel('Image sequence number')
   ax.set_ylabel('RMSE [m]')
   plt.savefig('rmse.jpg')
+
+  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+  for method, outliers in frac_outliers_per_method.items():
+    outlier_array = np.zeros(tmax, dtype=float) * np.nan
+    for idx, frac_outliers in outliers.items():
+      outlier_array[int(idx)] = frac_outliers
+    ax.plot(outlier_array, label=method)
+  ax.legend()
+  ax.set_xlabel('Image sequence number')
+  ax.set_ylabel('Fraction outlier px (error >= 6 cm)')
+  plt.savefig('outliers.jpg')
 
 
 render_html(test_sets)

@@ -1,9 +1,9 @@
 complete_failure:0
-frac_estimated:0.790404
-rmse:0.038760
-median_error:0.015965
+frac_estimated:0.790400
+rmse:0.038767
+median_error:0.015963
 max_error:1.378646
 mean_relative_error:0.003727
-frac_inliers:0.879792
-frac_outliers:0.120208
-outliers_over_inliers:0.136633
+frac_inliers:0.947993
+frac_outliers:0.052007
+outliers_over_inliers:0.054860

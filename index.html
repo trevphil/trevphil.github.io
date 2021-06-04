@@ -23,12 +23,12 @@
       <td>Calculated by projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, and calculating how many pixels are filled</td>
     </tr>
     <tr>
-      <th>Fraction of inlier px</th>
-      <td>The fraction of estimated points with an error below 4 cm. Based on estimated vs. true ray length from camera origin to surface.</td>
+      <th>Fraction inliers</th>
+      <td>The fraction of estimated points with an error below 6 cm. Based on estimated vs. true ray length from camera origin to surface.</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>1 - (fraction of inlier px)</td>
+      <th>Fraction outliers</th>
+      <td>1 - (fraction of inliers)</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
@@ -49,145 +49,6 @@
     <tr>
       <th>RMSE</th>
       <td>Root mean squared error of estimated vs. ground truth depth. Based on estimated vs. true ray length from camera origin to surface.</td>
-    </tr>
-  </tbody>
-</table><hr/><br/><p><b>Full Sequence</b></p><br/><table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Dense KLT Optical Flow</th>
-      <th>EPL Search (Patch Match NCC)</th>
-      <th>EPL Search (Patch Match SSD)</th>
-      <th>EPL Search (Patch Match ZM-SSD)</th>
-      <th>Farneback Optical Flow</th>
-      <th>Generalized Rectification</th>
-      <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="11" valign="top">AirSim</th>
-      <th>Complete failure</th>
-      <td>0.062224</td>
-      <td>0.0646327</td>
-      <td>0.0598153</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.446809</td>
-      <td>0.182658</td>
-      <td>0.181052</td>
-    </tr>
-    <tr>
-      <th>Debug depth</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Debug stereo</th>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction estimated px</th>
-      <td>0.794331</td>
-      <td>0.283511</td>
-      <td>0.441572</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.7993</td>
-      <td>0.64728</td>
-      <td>0.618278</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.848802</td>
-      <td>0.624118</td>
-      <td>0.620401</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.692846</td>
-      <td>0.812917</td>
-      <td>0.795736</td>
-    </tr>
-    <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.151198</td>
-      <td>0.375882</td>
-      <td>0.379599</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.307154</td>
-      <td>0.187083</td>
-      <td>0.204264</td>
-    </tr>
-    <tr>
-      <th>G.T. relative error</th>
-      <td>0.00585779</td>
-      <td>0.0094008</td>
-      <td>0.00980194</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.0400285</td>
-      <td>0.00493079</td>
-      <td>0.0199612</td>
-    </tr>
-    <tr>
-      <th>Max abs. error [m]</th>
-      <td>5.90452</td>
-      <td>6.78521</td>
-      <td>7.47219</td>
-      <td>-</td>
-      <td>-</td>
-      <td>104.336</td>
-      <td>2105.21</td>
-      <td>2015.99</td>
-    </tr>
-    <tr>
-      <th>Median abs. error [m]</th>
-      <td>0.016269</td>
-      <td>0.0308835</td>
-      <td>0.0313565</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.022724</td>
-      <td>0.0138955</td>
-      <td>0.0174595</td>
-    </tr>
-    <tr>
-      <th>Outliers / inliers</th>
-      <td>0.178131</td>
-      <td>0.602261</td>
-      <td>0.611861</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.443322</td>
-      <td>0.230137</td>
-      <td>0.256698</td>
-    </tr>
-    <tr>
-      <th>RMSE [m]</th>
-      <td>0.058867</td>
-      <td>0.115264</td>
-      <td>0.125253</td>
-      <td>-</td>
-      <td>-</td>
-      <td>0.342613</td>
-      <td>0.0431885</td>
-      <td>1.25506</td>
     </tr>
   </tbody>
 </table><hr/><br/><p><b>Planar (Image Pair)</b></p><br/><table border="1" class="dataframe">
@@ -243,88 +104,88 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.627422</td>
-      <td>0.345469</td>
-      <td>0.439883</td>
+      <td>0.342585</td>
+      <td>0.438828</td>
       <td>-</td>
-      <td>0.475384</td>
-      <td>0.677376</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.731498</td>
-      <td>0.653957</td>
-      <td>0.658798</td>
-      <td>-</td>
-      <td>0.570334</td>
-      <td>0.392278</td>
+      <td>0.475381</td>
+      <td>0.676455</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.268502</td>
-      <td>0.346043</td>
-      <td>0.341202</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.887199</td>
+      <td>0.814855</td>
+      <td>0.820443</td>
       <td>-</td>
-      <td>0.429666</td>
-      <td>0.607722</td>
+      <td>0.747925</td>
+      <td>0.575797</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.112801</td>
+      <td>0.185145</td>
+      <td>0.179557</td>
+      <td>-</td>
+      <td>0.252075</td>
+      <td>0.424203</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.005228</td>
-      <td>0.00671</td>
-      <td>0.00653</td>
+      <td>0.006658</td>
+      <td>0.006513</td>
       <td>-</td>
       <td>0.007638</td>
-      <td>0.011203</td>
+      <td>0.010996</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.494516</td>
-      <td>11.0901</td>
-      <td>12.0077</td>
+      <td>8.89252</td>
+      <td>12.0111</td>
       <td>-</td>
-      <td>1.17008</td>
-      <td>4.33089</td>
+      <td>1.17009</td>
+      <td>1.13441</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.024421</td>
-      <td>0.027709</td>
-      <td>0.027524</td>
+      <td>0.027572</td>
+      <td>0.027337</td>
       <td>-</td>
-      <td>0.033952</td>
-      <td>0.051461</td>
+      <td>0.033949</td>
+      <td>0.051409</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.367058</td>
-      <td>0.529151</td>
-      <td>0.517916</td>
+      <td>0.127143</td>
+      <td>0.227212</td>
+      <td>0.218853</td>
       <td>-</td>
-      <td>0.753359</td>
-      <td>1.54921</td>
+      <td>0.337033</td>
+      <td>0.736724</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.040851</td>
-      <td>0.109196</td>
-      <td>0.099286</td>
+      <td>0.104353</td>
+      <td>0.098644</td>
       <td>-</td>
-      <td>0.061228</td>
-      <td>0.109219</td>
+      <td>0.061226</td>
+      <td>0.086406</td>
       <td>-</td>
       <td>-</td>
     </tr>
@@ -365,52 +226,52 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.633219</td>
-      <td>0.327559</td>
-      <td>0.448932</td>
+      <td>0.325208</td>
+      <td>0.446309</td>
       <td>-</td>
-      <td>0.461237</td>
-      <td>0.636328</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.64531</td>
-      <td>0.592849</td>
-      <td>0.589721</td>
-      <td>-</td>
-      <td>0.432843</td>
-      <td>0.349385</td>
+      <td>0.46125</td>
+      <td>0.63585</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.35469</td>
-      <td>0.407151</td>
-      <td>0.410279</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.817889</td>
+      <td>0.769373</td>
+      <td>0.768392</td>
       <td>-</td>
-      <td>0.567157</td>
-      <td>0.650615</td>
+      <td>0.597076</td>
+      <td>0.499882</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.182111</td>
+      <td>0.230627</td>
+      <td>0.231608</td>
+      <td>-</td>
+      <td>0.402924</td>
+      <td>0.500118</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.006358</td>
-      <td>0.007518</td>
-      <td>0.007497</td>
+      <td>0.007454</td>
+      <td>0.007439</td>
       <td>-</td>
       <td>0.010832</td>
-      <td>0.013496</td>
+      <td>0.013449</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.335284</td>
-      <td>8.31763</td>
-      <td>3.76327</td>
+      <td>7.82639</td>
+      <td>3.80815</td>
       <td>-</td>
       <td>1.68332</td>
       <td>3.029</td>
@@ -420,33 +281,33 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.028704</td>
-      <td>0.032027</td>
-      <td>0.032288</td>
+      <td>0.031943</td>
+      <td>0.032097</td>
       <td>-</td>
-      <td>0.047627</td>
-      <td>0.060051</td>
+      <td>0.047624</td>
+      <td>0.060014</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.549642</td>
-      <td>0.686771</td>
-      <td>0.695716</td>
+      <td>0.222659</td>
+      <td>0.29976</td>
+      <td>0.30142</td>
       <td>-</td>
-      <td>1.31031</td>
-      <td>1.86217</td>
+      <td>0.67483</td>
+      <td>1.00047</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.047373</td>
-      <td>0.077243</td>
-      <td>0.062405</td>
+      <td>0.071924</td>
+      <td>0.063898</td>
       <td>-</td>
-      <td>0.084589</td>
-      <td>0.109373</td>
+      <td>0.084588</td>
+      <td>0.108591</td>
       <td>-</td>
       <td>-</td>
     </tr>
@@ -487,8 +348,8 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.838314</td>
-      <td>0.360719</td>
-      <td>0.605843</td>
+      <td>0.237852</td>
+      <td>0.432572</td>
       <td>-</td>
       <td>0.799255</td>
       <td>0.833229</td>
@@ -496,32 +357,32 @@
       <td>0.637357</td>
     </tr>
     <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.971324</td>
-      <td>0.825068</td>
-      <td>0.816554</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.995239</td>
+      <td>0.914931</td>
+      <td>0.910112</td>
       <td>-</td>
-      <td>0.876138</td>
-      <td>0.326549</td>
-      <td>0.323824</td>
-      <td>0.341018</td>
+      <td>0.950577</td>
+      <td>0.594567</td>
+      <td>0.780737</td>
+      <td>0.680198</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.028676</td>
-      <td>0.174932</td>
-      <td>0.183446</td>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.004761</td>
+      <td>0.085069</td>
+      <td>0.089888</td>
       <td>-</td>
-      <td>0.123862</td>
-      <td>0.673451</td>
-      <td>0.676176</td>
-      <td>0.658982</td>
+      <td>0.049423</td>
+      <td>0.405433</td>
+      <td>0.219263</td>
+      <td>0.319802</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.002645</td>
-      <td>0.00418</td>
-      <td>0.004222</td>
+      <td>0.004596</td>
+      <td>0.004661</td>
       <td>-</td>
       <td>0.003837</td>
       <td>0.009105</td>
@@ -531,8 +392,8 @@
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.131849</td>
-      <td>8.89649</td>
-      <td>5.86836</td>
+      <td>8.89695</td>
+      <td>2.27064</td>
       <td>-</td>
       <td>1.61772</td>
       <td>0.304928</td>
@@ -542,32 +403,32 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.014414</td>
-      <td>0.019888</td>
-      <td>0.020496</td>
+      <td>0.022073</td>
+      <td>0.022781</td>
       <td>-</td>
-      <td>0.016666</td>
+      <td>0.016667</td>
       <td>0.056963</td>
       <td>0.047214</td>
       <td>0.055461</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.029523</td>
-      <td>0.212021</td>
-      <td>0.224659</td>
+      <td>0.004783</td>
+      <td>0.092978</td>
+      <td>0.098766</td>
       <td>-</td>
-      <td>0.141373</td>
-      <td>2.06233</td>
-      <td>2.0881</td>
-      <td>1.9324</td>
+      <td>0.051992</td>
+      <td>0.681898</td>
+      <td>0.28084</td>
+      <td>0.470161</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.01909</td>
-      <td>0.048156</td>
-      <td>0.038658</td>
+      <td>0.057443</td>
+      <td>0.037601</td>
       <td>-</td>
-      <td>0.041461</td>
+      <td>0.04146</td>
       <td>0.058854</td>
       <td>0.054263</td>
       <td>0.055596</td>
@@ -609,32 +470,32 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.785117</td>
-      <td>0.362952</td>
-      <td>0.590127</td>
+      <td>0.256849</td>
+      <td>0.441628</td>
       <td>-</td>
-      <td>0.790404</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.950226</td>
-      <td>0.82922</td>
-      <td>0.823079</td>
-      <td>-</td>
-      <td>0.879792</td>
+      <td>0.7904</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.049774</td>
-      <td>0.17078</td>
-      <td>0.176921</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.987359</td>
+      <td>0.917455</td>
+      <td>0.911676</td>
       <td>-</td>
-      <td>0.120208</td>
+      <td>0.947993</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.012641</td>
+      <td>0.082545</td>
+      <td>0.088324</td>
+      <td>-</td>
+      <td>0.052007</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -642,8 +503,8 @@
     <tr>
       <th>G.T. relative error</th>
       <td>0.002621</td>
-      <td>0.004205</td>
-      <td>0.004181</td>
+      <td>0.004617</td>
+      <td>0.004652</td>
       <td>-</td>
       <td>0.003727</td>
       <td>-</td>
@@ -653,8 +514,8 @@
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.155311</td>
-      <td>7.94226</td>
-      <td>8.13956</td>
+      <td>6.58406</td>
+      <td>4.43921</td>
       <td>-</td>
       <td>1.37865</td>
       <td>-</td>
@@ -664,21 +525,21 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.012786</td>
-      <td>0.018991</td>
-      <td>0.019519</td>
+      <td>0.021767</td>
+      <td>0.022502</td>
       <td>-</td>
-      <td>0.015965</td>
+      <td>0.015963</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.052381</td>
-      <td>0.205952</td>
-      <td>0.21495</td>
+      <td>0.012803</td>
+      <td>0.089971</td>
+      <td>0.09688</td>
       <td>-</td>
-      <td>0.136633</td>
+      <td>0.05486</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -686,10 +547,10 @@
     <tr>
       <th>RMSE [m]</th>
       <td>0.020391</td>
-      <td>0.062348</td>
-      <td>0.059588</td>
+      <td>0.059406</td>
+      <td>0.040212</td>
       <td>-</td>
-      <td>0.03876</td>
+      <td>0.038767</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -748,88 +609,88 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.57734</td>
-      <td>0.280547</td>
-      <td>0.394281</td>
+      <td>0.277227</td>
+      <td>0.393324</td>
       <td>-</td>
-      <td>0.419453</td>
-      <td>0.677116</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.698461</td>
-      <td>0.689987</td>
-      <td>0.690445</td>
-      <td>-</td>
-      <td>0.584597</td>
-      <td>0.370852</td>
+      <td>0.419456</td>
+      <td>0.647663</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.301539</td>
-      <td>0.310013</td>
-      <td>0.309555</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.824706</td>
+      <td>0.836878</td>
+      <td>0.834444</td>
       <td>-</td>
-      <td>0.415403</td>
-      <td>0.629148</td>
+      <td>0.756312</td>
+      <td>0.559952</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.175294</td>
+      <td>0.163122</td>
+      <td>0.165556</td>
+      <td>-</td>
+      <td>0.243688</td>
+      <td>0.440048</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.008873</td>
-      <td>0.008688</td>
-      <td>0.00909</td>
+      <td>0.00853</td>
+      <td>0.009191</td>
       <td>-</td>
-      <td>0.008004</td>
-      <td>0.015968</td>
+      <td>0.008005</td>
+      <td>0.01325</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.16228</td>
-      <td>13.1449</td>
-      <td>12.9537</td>
+      <td>13.2318</td>
+      <td>13.1798</td>
       <td>-</td>
-      <td>2.20615</td>
-      <td>3.68397</td>
+      <td>2.20611</td>
+      <td>1.58192</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.023977</td>
-      <td>0.025224</td>
-      <td>0.025133</td>
+      <td>0.024905</td>
+      <td>0.025018</td>
       <td>-</td>
-      <td>0.032754</td>
-      <td>0.054846</td>
+      <td>0.032756</td>
+      <td>0.052905</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.431718</td>
-      <td>0.449304</td>
-      <td>0.44834</td>
+      <td>0.212553</td>
+      <td>0.194917</td>
+      <td>0.198403</td>
       <td>-</td>
-      <td>0.71058</td>
-      <td>1.6965</td>
+      <td>0.322206</td>
+      <td>0.785867</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.111051</td>
-      <td>0.24277</td>
-      <td>0.24661</td>
+      <td>0.238903</td>
+      <td>0.257831</td>
       <td>-</td>
-      <td>0.07432</td>
-      <td>0.160039</td>
+      <td>0.074328</td>
+      <td>0.119846</td>
       <td>-</td>
       <td>-</td>
     </tr>
@@ -870,88 +731,88 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.567285</td>
-      <td>0.28056</td>
-      <td>0.402275</td>
+      <td>0.278542</td>
+      <td>0.399577</td>
       <td>-</td>
-      <td>0.408148</td>
-      <td>0.633411</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.572228</td>
-      <td>0.605751</td>
-      <td>0.596541</td>
-      <td>-</td>
-      <td>0.422456</td>
-      <td>0.326162</td>
+      <td>0.408151</td>
+      <td>0.614648</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.427772</td>
-      <td>0.394249</td>
-      <td>0.403459</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.737499</td>
+      <td>0.7793</td>
+      <td>0.770533</td>
       <td>-</td>
-      <td>0.577544</td>
-      <td>0.673838</td>
+      <td>0.582423</td>
+      <td>0.483923</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.262501</td>
+      <td>0.2207</td>
+      <td>0.229467</td>
+      <td>-</td>
+      <td>0.417577</td>
+      <td>0.516077</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.010136</td>
-      <td>0.008875</td>
-      <td>0.010176</td>
+      <td>0.008787</td>
+      <td>0.010141</td>
       <td>-</td>
       <td>0.017311</td>
-      <td>0.017678</td>
+      <td>0.01564</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.14725</td>
-      <td>8.4906</td>
-      <td>9.73414</td>
+      <td>8.92226</td>
+      <td>10.0593</td>
       <td>-</td>
-      <td>10.2781</td>
-      <td>2.8209</td>
+      <td>10.2779</td>
+      <td>2.54006</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.033455</td>
-      <td>0.031047</td>
-      <td>0.031705</td>
+      <td>0.031</td>
+      <td>0.031595</td>
       <td>-</td>
-      <td>0.049113</td>
-      <td>0.0641</td>
+      <td>0.04911</td>
+      <td>0.061997</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.747555</td>
-      <td>0.650843</td>
-      <td>0.67633</td>
+      <td>0.355933</td>
+      <td>0.283203</td>
+      <td>0.297803</td>
       <td>-</td>
-      <td>1.36711</td>
-      <td>2.06596</td>
+      <td>0.716966</td>
+      <td>1.06644</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.101924</td>
-      <td>0.161925</td>
-      <td>0.226157</td>
+      <td>0.169418</td>
+      <td>0.235052</td>
       <td>-</td>
-      <td>0.355711</td>
-      <td>0.166585</td>
+      <td>0.355707</td>
+      <td>0.138843</td>
       <td>-</td>
       <td>-</td>
     </tr>
@@ -992,52 +853,52 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.814352</td>
-      <td>0.312454</td>
-      <td>0.552747</td>
+      <td>0.178366</td>
+      <td>0.352103</td>
       <td>-</td>
-      <td>0.716729</td>
-      <td>0.828281</td>
+      <td>0.716738</td>
+      <td>0.815824</td>
       <td>0.705843</td>
-      <td>0.634844</td>
+      <td>0.62597</td>
     </tr>
     <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.897269</td>
-      <td>0.817644</td>
-      <td>0.816733</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.915095</td>
+      <td>0.889652</td>
+      <td>0.894902</td>
       <td>-</td>
-      <td>0.886669</td>
-      <td>0.306467</td>
-      <td>0.301291</td>
-      <td>0.313228</td>
+      <td>0.942364</td>
+      <td>0.567486</td>
+      <td>0.741715</td>
+      <td>0.640599</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.102731</td>
-      <td>0.182356</td>
-      <td>0.183267</td>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.084905</td>
+      <td>0.110348</td>
+      <td>0.105098</td>
       <td>-</td>
-      <td>0.113331</td>
-      <td>0.693533</td>
-      <td>0.698709</td>
-      <td>0.686772</td>
+      <td>0.057636</td>
+      <td>0.432514</td>
+      <td>0.258285</td>
+      <td>0.359401</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.00936</td>
-      <td>0.005836</td>
-      <td>0.006501</td>
+      <td>0.006706</td>
+      <td>0.00732</td>
       <td>-</td>
-      <td>0.010279</td>
-      <td>0.010793</td>
+      <td>0.010277</td>
+      <td>0.010566</td>
       <td>0.009662</td>
-      <td>0.010832</td>
+      <td>0.010663</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.29347</td>
-      <td>14.8009</td>
-      <td>13.6931</td>
+      <td>10.1668</td>
+      <td>14.1442</td>
       <td>-</td>
       <td>16.5203</td>
       <td>1.16742</td>
@@ -1047,35 +908,35 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.01458</td>
-      <td>0.019336</td>
-      <td>0.019786</td>
+      <td>0.022466</td>
+      <td>0.02263</td>
       <td>-</td>
-      <td>0.014885</td>
-      <td>0.057771</td>
+      <td>0.014883</td>
+      <td>0.057622</td>
       <td>0.048555</td>
-      <td>0.056129</td>
+      <td>0.055999</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.114493</td>
-      <td>0.223026</td>
-      <td>0.224391</td>
+      <td>0.092783</td>
+      <td>0.124035</td>
+      <td>0.117441</td>
       <td>-</td>
-      <td>0.127816</td>
-      <td>2.26299</td>
-      <td>2.31905</td>
-      <td>2.19256</td>
+      <td>0.061161</td>
+      <td>0.762157</td>
+      <td>0.348226</td>
+      <td>0.561038</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.157578</td>
-      <td>0.161546</td>
-      <td>0.233403</td>
+      <td>0.174009</td>
+      <td>0.242911</td>
       <td>-</td>
-      <td>0.468083</td>
-      <td>0.084161</td>
+      <td>0.468071</td>
+      <td>0.080154</td>
       <td>0.084905</td>
-      <td>0.080894</td>
+      <td>0.078097</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move y-axis</th>
@@ -1114,32 +975,32 @@
     <tr>
       <th>Fraction estimated px</th>
       <td>0.819805</td>
-      <td>0.28138</td>
-      <td>0.552565</td>
+      <td>0.172679</td>
+      <td>0.372979</td>
       <td>-</td>
-      <td>0.725042</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction of inlier px</th>
-      <td>0.896332</td>
-      <td>0.81831</td>
-      <td>0.821526</td>
-      <td>-</td>
-      <td>0.887915</td>
+      <td>0.725023</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
-      <th>Fraction of outlier px</th>
-      <td>0.103668</td>
-      <td>0.18169</td>
-      <td>0.178474</td>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.923342</td>
+      <td>0.893468</td>
+      <td>0.901209</td>
       <td>-</td>
-      <td>0.112085</td>
+      <td>0.945952</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.076658</td>
+      <td>0.106532</td>
+      <td>0.098791</td>
+      <td>-</td>
+      <td>0.054048</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -1147,8 +1008,8 @@
     <tr>
       <th>G.T. relative error</th>
       <td>0.007591</td>
-      <td>0.006876</td>
-      <td>0.007074</td>
+      <td>0.008068</td>
+      <td>0.00836</td>
       <td>-</td>
       <td>0.010766</td>
       <td>-</td>
@@ -1158,8 +1019,8 @@
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.36571</td>
-      <td>18.0421</td>
-      <td>18.0606</td>
+      <td>18.0368</td>
+      <td>18.0368</td>
       <td>-</td>
       <td>17.996</td>
       <td>-</td>
@@ -1169,21 +1030,21 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.014374</td>
-      <td>0.01885</td>
-      <td>0.019175</td>
+      <td>0.021974</td>
+      <td>0.022184</td>
       <td>-</td>
-      <td>0.014995</td>
+      <td>0.014994</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.115658</td>
-      <td>0.222031</td>
-      <td>0.217248</td>
+      <td>0.083022</td>
+      <td>0.119235</td>
+      <td>0.109621</td>
       <td>-</td>
-      <td>0.126234</td>
+      <td>0.057136</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -1191,13 +1052,13 @@
     <tr>
       <th>RMSE [m]</th>
       <td>0.13104</td>
-      <td>0.272165</td>
-      <td>0.325999</td>
+      <td>0.302252</td>
+      <td>0.376066</td>
       <td>-</td>
-      <td>0.56699</td>
+      <td>0.566997</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
   </tbody>
-</table><hr/><br/><img src="success.jpg" alt=""><hr/><br/><img src="rmse.jpg" alt=""></body></html>
+</table><hr/><br/><img src="success.jpg" alt=""><hr/><br/><img src="rmse.jpg" alt=""><hr/><br/><img src="outliers.jpg" alt=""></body></html>

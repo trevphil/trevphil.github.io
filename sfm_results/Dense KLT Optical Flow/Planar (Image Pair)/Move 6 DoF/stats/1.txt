@@ -4,6 +4,6 @@ rmse:0.040851
 median_error:0.024421
 max_error:0.494516
 mean_relative_error:0.005228
-frac_inliers:0.731498
-frac_outliers:0.268502
-outliers_over_inliers:0.367058
+frac_inliers:0.887199
+frac_outliers:0.112801
+outliers_over_inliers:0.127143
