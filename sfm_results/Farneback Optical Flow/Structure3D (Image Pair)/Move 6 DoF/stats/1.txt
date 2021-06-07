@@ -1,8 +1,8 @@
-complete_failure:0
+status:success
 frac_estimated:0.419456
 rmse:0.074328
-median_error:0.032756
-max_error:2.206109
+median_error:0.032758
+max_error:2.206104
 mean_relative_error:0.008005
 frac_inliers:0.756312
 frac_outliers:0.243688

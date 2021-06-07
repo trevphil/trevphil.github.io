@@ -9,7 +9,7 @@ def image_path_to_link(p):
 
 def info_table():
   keys = {
-    'Complete failure': '1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".',
+    'Failure': '1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".',
     'Debug depth': 'A link to a "debug image" comparing ground truth vs. estimated depth. Coloring is based on z-coordinate in camera frame, NOT ray length from camera to surface, and is scaled by the overall (min, max) z-coordinate from estimated and ground truth points.',
     'Debug stereo': 'A link to a "debug image" from the stereo algorithm, this is specific and different for each algorithm.',
     'Fraction estimated px': 'Calculated by projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, and calculating how many pixels are filled',

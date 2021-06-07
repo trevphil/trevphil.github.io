@@ -24,8 +24,20 @@ def parse_stats_file(filepath):
   stats = defaultdict(lambda: np.nan)
   with open(filepath, 'r') as f:
     for line in f:
-      name, val, *_ = line.split(':')
-      stats[name] = float(val)
+      name, val = line.split(':')[:2]
+      name = name.strip()
+      val = val.strip()
+      if name == 'status':
+        if val == 'success':
+          stats['failure'] = 0.0
+        elif val == 'failure' or val == 'not_enough_points':
+          stats['failure'] = 1.0
+        elif val == 'no_new_image':
+          stats['failure'] = np.nan
+        else:
+          assert False, 'Unknown status: %s' % val
+      else:
+        stats[name] = float(val)
   return stats
 
 
@@ -34,18 +46,18 @@ def parse_stats(stats_files):
     combined_stats = parse_stats_file(stats_files[0])
   else:
     all_stats = [parse_stats_file(f) for f in stats_files]
-    succeeded = [s for s in all_stats if s['complete_failure'] == 0]
+    did_not_fail = [s for s in all_stats if s['failure'] != 1]
+    succeeded = [s for s in all_stats if s['failure'] == 0]
     n = float(len(all_stats))
-    n_succeeded = float(len(succeeded))
-    n_failed = n - n_succeeded
+    n_failed = n - float(len(did_not_fail))
     combined_stats = defaultdict(lambda: np.nan)
-    combined_stats['complete_failure'] = n_failed / n
+    combined_stats['failure'] = n_failed / n
 
     meank = lambda k: np.mean([s[k] for s in succeeded])
     mediank = lambda k: np.median([s[k] for s in succeeded])
     maxk = lambda k: np.max([s[k] for s in succeeded])
 
-    if n_succeeded > 0:
+    if len(succeeded) > 0:
       combined_stats['frac_estimated'] = meank('frac_estimated')
       combined_stats['frac_inliers'] = meank('frac_inliers')
       combined_stats['frac_outliers'] = 1.0 - combined_stats['frac_inliers']
@@ -57,7 +69,7 @@ def parse_stats(stats_files):
       combined_stats['mean_relative_error'] = meank('mean_relative_error')
 
   key2name = {
-    'complete_failure': 'Complete failure',
+    'failure': 'Failure',
     'frac_estimated': 'Fraction estimated px',
     'frac_inliers': 'Fraction inliers (error < 6 cm)',
     'frac_outliers': 'Fraction outliers (error >= 6 cm)',
@@ -74,15 +86,20 @@ def parse_stats(stats_files):
   return final_output
 
 
-if not os.path.exists('/tmp/sfm_results'):
-  print('"/tmp/sfm_results" not found!')
-  exit()
-
 if os.path.exists('./sfm_results'):
   response = input('Delete existing results? [y/n] ')
   if response == 'y':
+    if not os.path.exists('/tmp/sfm_results'):
+      print('"/tmp/sfm_results" not found!')
+      exit()
     shutil.rmtree('./sfm_results')
     shutil.copytree('/tmp/sfm_results', './sfm_results')
+else:
+  if not os.path.exists('/tmp/sfm_results'):
+    print('"/tmp/sfm_results" not found!')
+    exit()
+  shutil.copytree('/tmp/sfm_results', './sfm_results')
+
 
 basepath = Path('./sfm_results')
 stereo_method_dirs = get_subdirectories(basepath)
@@ -145,11 +162,19 @@ def get_stats_through_time(stats_files):
   for stats_file in stats_files:
     idx = int(stats_file.parts[-1].split('.')[0])
     stats = parse_stats_file(stats_file)
-    failed = int(stats['complete_failure'])
-    did_fail[idx] = failed
-    if failed == 0:
-      rmse[idx] = stats['rmse']
-      outliers[idx] = stats['frac_outliers']
+    if np.isnan(stats['failure']):
+      # Means that `idx` was not used as a keyframe
+      did_fail[idx] = 0
+    else:
+      # Otherwise stats['failure'] should be either 0 or 1
+      failed = int(stats['failure'])
+      did_fail[idx] = failed
+      if failed == 1:
+        rmse[idx] = np.nan
+        outliers[idx] = np.nan
+      else:
+        rmse[idx] = stats['rmse']
+        outliers[idx] = stats['frac_outliers']
   return did_fail, rmse, outliers
 
 
@@ -176,8 +201,8 @@ for test_dir in test_dirs:
 
   df = test_sets[test_set_name]
 
-  if stats['Complete failure'] == 1:
-    df[stereo_method][motion]['Complete failure'] = 1
+  if stats['Failure'] == 1:
+    df[stereo_method][motion]['Failure'] = 1
   else:
     for stat_name in stat_names:
       stat_value = stats[stat_name]
@@ -209,21 +234,25 @@ if len(failure_per_method) > 0:
   indices = set()
   for method, did_fail in failure_per_method.items():
     indices = set(did_fail.keys()).union(indices)
-  tmax = int(np.max(list(indices))) + 1
+  indices = np.array(list(indices))
+  tmin = int(np.min(indices))
+  tmax = int(np.max(indices)) + 1
 
   fig, axs = plt.subplots(len(failure_per_method), 1,
                           figsize=(10, 7))
-  i = 0
+  if len(failure_per_method) == 1:
+    axs = (axs, )
 
+  i = 0
   for method, did_fail in failure_per_method.items():
-    successes = np.zeros(tmax, dtype=np.uint8)
-    for idx, failed in did_fail.items():
-      successes[int(idx)] = 1 - int(failed)
-    axs[i].plot(successes, label=method)
+    x = list(sorted(did_fail.keys()))
+    y = [(1 - did_fail[t]) for t in x]
+    axs[i].plot(x, y, label=method)
     axs[i].legend()
     axs[i].set_xlabel('Image sequence number')
     axs[i].set_ylabel('Success?')
     axs[i].set_yticks([0, 1])
+    axs[i].set_xlim(tmin, tmax)
     i += 1
 
   plt.tight_layout()
@@ -233,22 +262,22 @@ if len(failure_per_method) > 0:
 
   fig, ax = plt.subplots(1, 1, figsize=(10, 5))
   for method, rmse in rmse_per_method.items():
-    rmse_errors = np.zeros(tmax, dtype=float) * np.nan
-    for idx, e in rmse.items():
-      rmse_errors[int(idx)] = min(e, max_rmse)
-    ax.plot(rmse_errors, label=method)
+    x = list(sorted(rmse.keys()))
+    y = [min(rmse[t], max_rmse) for t in x]
+    ax.plot(x, y, label=method)
   ax.legend()
+  ax.set_xlim(tmin, tmax)
   ax.set_xlabel('Image sequence number')
   ax.set_ylabel('RMSE [m]')
   plt.savefig('rmse.jpg')
 
   fig, ax = plt.subplots(1, 1, figsize=(10, 5))
   for method, outliers in frac_outliers_per_method.items():
-    outlier_array = np.zeros(tmax, dtype=float) * np.nan
-    for idx, frac_outliers in outliers.items():
-      outlier_array[int(idx)] = frac_outliers
-    ax.plot(outlier_array, label=method)
+    x = list(sorted(outliers.keys()))
+    y = [outliers[t] for t in x]
+    ax.plot(x, y, label=method)
   ax.legend()
+  ax.set_xlim(tmin, tmax)
   ax.set_xlabel('Image sequence number')
   ax.set_ylabel('Fraction outlier px (error >= 6 cm)')
   plt.savefig('outliers.jpg')

@@ -7,16 +7,16 @@
   </thead>
   <tbody>
     <tr>
-      <th>Complete failure</th>
-      <td>1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td>A link to a "debug image" comparing ground truth vs. estimated depth. Coloring is based on z-coordinate in camera frame, NOT ray length from camera to surface, and is scaled by the overall (min, max) z-coordinate from estimated and ground truth points.</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
       <td>A link to a "debug image" from the stereo algorithm, this is specific and different for each algorithm.</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
@@ -51,6 +51,145 @@
       <td>Root mean squared error of estimated vs. ground truth depth. Based on estimated vs. true ray length from camera origin to surface.</td>
     </tr>
   </tbody>
+</table><hr/><br/><p><b>Full Sequence</b></p><br/><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Patch Match NCC)</th>
+      <th>EPL Search (Patch Match SSD)</th>
+      <th>EPL Search (Patch Match ZM-SSD)</th>
+      <th>Farneback Optical Flow</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>OpenCV Block Matching</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">AirSim</th>
+      <th>Debug depth</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.062224</td>
+      <td>-</td>
+      <td>0.0598153</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.182658</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.794323</td>
+      <td>-</td>
+      <td>0.401273</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.648581</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.925057</td>
+      <td>-</td>
+      <td>0.744441</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.90236</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.0749428</td>
+      <td>-</td>
+      <td>0.255559</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.0976397</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.00585785</td>
+      <td>-</td>
+      <td>0.00990708</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.00492988</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>5.90452</td>
+      <td>-</td>
+      <td>6.02766</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>2105.21</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.01627</td>
+      <td>-</td>
+      <td>0.0312005</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.013894</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.0810142</td>
+      <td>-</td>
+      <td>0.34329</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.108205</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0588668</td>
+      <td>-</td>
+      <td>0.11641</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>0.0431865</td>
+      <td>-</td>
+    </tr>
+  </tbody>
 </table><hr/><br/><p><b>Planar (Image Pair)</b></p><br/><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -69,17 +208,6 @@
   <tbody>
     <tr>
       <th rowspan="11" valign="top">Move 6 DoF</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
@@ -102,56 +230,67 @@
       <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
-      <td>0.627422</td>
-      <td>0.342585</td>
-      <td>0.438828</td>
+      <td>0.627435</td>
+      <td>0.344115</td>
+      <td>0.442617</td>
       <td>-</td>
       <td>0.475381</td>
-      <td>0.676455</td>
+      <td>0.677448</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
-      <td>0.887199</td>
-      <td>0.814855</td>
-      <td>0.820443</td>
+      <td>0.88721</td>
+      <td>0.813442</td>
+      <td>0.818419</td>
       <td>-</td>
       <td>0.747925</td>
-      <td>0.575797</td>
+      <td>0.575505</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
-      <td>0.112801</td>
-      <td>0.185145</td>
-      <td>0.179557</td>
+      <td>0.11279</td>
+      <td>0.186558</td>
+      <td>0.181581</td>
       <td>-</td>
       <td>0.252075</td>
-      <td>0.424203</td>
+      <td>0.424495</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.005228</td>
-      <td>0.006658</td>
-      <td>0.006513</td>
+      <td>0.006469</td>
+      <td>0.006425</td>
       <td>-</td>
       <td>0.007638</td>
-      <td>0.010996</td>
+      <td>0.011018</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.494516</td>
-      <td>8.89252</td>
-      <td>12.0111</td>
+      <td>4.2151</td>
+      <td>3.5013</td>
       <td>-</td>
-      <td>1.17009</td>
+      <td>1.1701</td>
       <td>1.13441</td>
       <td>-</td>
       <td>-</td>
@@ -159,49 +298,38 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.024421</td>
-      <td>0.027572</td>
-      <td>0.027337</td>
+      <td>0.027509</td>
+      <td>0.027442</td>
       <td>-</td>
       <td>0.033949</td>
-      <td>0.051409</td>
+      <td>0.051433</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.127143</td>
-      <td>0.227212</td>
-      <td>0.218853</td>
+      <td>0.127129</td>
+      <td>0.229344</td>
+      <td>0.221868</td>
       <td>-</td>
       <td>0.337033</td>
-      <td>0.736724</td>
+      <td>0.737606</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.040851</td>
-      <td>0.104353</td>
-      <td>0.098644</td>
+      <td>0.062326</td>
+      <td>0.056663</td>
       <td>-</td>
       <td>0.061226</td>
-      <td>0.086406</td>
+      <td>0.086798</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move Toward Ground</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
@@ -224,54 +352,65 @@
       <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move Toward Ground/debug/0.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
-      <td>0.633219</td>
-      <td>0.325208</td>
-      <td>0.446309</td>
+      <td>0.633213</td>
+      <td>0.334128</td>
+      <td>0.456305</td>
       <td>-</td>
-      <td>0.46125</td>
-      <td>0.63585</td>
+      <td>0.461247</td>
+      <td>0.644023</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
-      <td>0.817889</td>
-      <td>0.769373</td>
-      <td>0.768392</td>
+      <td>0.817888</td>
+      <td>0.770766</td>
+      <td>0.767617</td>
       <td>-</td>
-      <td>0.597076</td>
-      <td>0.499882</td>
+      <td>0.597073</td>
+      <td>0.499771</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
-      <td>0.182111</td>
-      <td>0.230627</td>
-      <td>0.231608</td>
+      <td>0.182112</td>
+      <td>0.229234</td>
+      <td>0.232383</td>
       <td>-</td>
-      <td>0.402924</td>
-      <td>0.500118</td>
+      <td>0.402927</td>
+      <td>0.500229</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.006358</td>
-      <td>0.007454</td>
-      <td>0.007439</td>
+      <td>0.007388</td>
+      <td>0.007429</td>
       <td>-</td>
       <td>0.010832</td>
-      <td>0.013449</td>
+      <td>0.013444</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.335284</td>
-      <td>7.82639</td>
-      <td>3.80815</td>
+      <td>3.77318</td>
+      <td>3.77318</td>
       <td>-</td>
       <td>1.68332</td>
       <td>3.029</td>
@@ -280,50 +419,39 @@
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.028704</td>
-      <td>0.031943</td>
-      <td>0.032097</td>
+      <td>0.028702</td>
+      <td>0.031791</td>
+      <td>0.032183</td>
       <td>-</td>
       <td>0.047624</td>
-      <td>0.060014</td>
+      <td>0.06003</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.222659</td>
-      <td>0.29976</td>
-      <td>0.30142</td>
+      <td>0.222662</td>
+      <td>0.297411</td>
+      <td>0.302733</td>
       <td>-</td>
-      <td>0.67483</td>
-      <td>1.00047</td>
+      <td>0.674837</td>
+      <td>1.00092</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.047373</td>
-      <td>0.071924</td>
-      <td>0.063898</td>
+      <td>0.047374</td>
+      <td>0.065661</td>
+      <td>0.062045</td>
       <td>-</td>
       <td>0.084588</td>
-      <td>0.108591</td>
+      <td>0.108744</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move x-axis</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
@@ -346,106 +474,106 @@
       <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
-      <td>0.838314</td>
-      <td>0.237852</td>
-      <td>0.432572</td>
+      <td>0.83832</td>
+      <td>0.345677</td>
+      <td>0.587262</td>
       <td>-</td>
-      <td>0.799255</td>
-      <td>0.833229</td>
-      <td>0.582373</td>
-      <td>0.637357</td>
+      <td>0.799258</td>
+      <td>0.841387</td>
+      <td>0.583717</td>
+      <td>0.643525</td>
     </tr>
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
       <td>0.995239</td>
-      <td>0.914931</td>
-      <td>0.910112</td>
+      <td>0.93377</td>
+      <td>0.935583</td>
       <td>-</td>
       <td>0.950577</td>
-      <td>0.594567</td>
-      <td>0.780737</td>
-      <td>0.680198</td>
+      <td>0.592342</td>
+      <td>0.779789</td>
+      <td>0.677507</td>
     </tr>
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
       <td>0.004761</td>
-      <td>0.085069</td>
-      <td>0.089888</td>
+      <td>0.06623</td>
+      <td>0.064417</td>
       <td>-</td>
       <td>0.049423</td>
-      <td>0.405433</td>
-      <td>0.219263</td>
-      <td>0.319802</td>
+      <td>0.407658</td>
+      <td>0.220211</td>
+      <td>0.322493</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
-      <td>0.002645</td>
-      <td>0.004596</td>
-      <td>0.004661</td>
+      <td>0.002644</td>
+      <td>0.004201</td>
+      <td>0.004234</td>
       <td>-</td>
       <td>0.003837</td>
-      <td>0.009105</td>
-      <td>0.007942</td>
-      <td>0.008974</td>
+      <td>0.009114</td>
+      <td>0.007947</td>
+      <td>0.00897</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.131849</td>
-      <td>8.89695</td>
-      <td>2.27064</td>
+      <td>1.87228</td>
+      <td>2.96755</td>
       <td>-</td>
       <td>1.61772</td>
-      <td>0.304928</td>
+      <td>1.22516</td>
       <td>1.28441</td>
       <td>0.336455</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.014414</td>
-      <td>0.022073</td>
-      <td>0.022781</td>
+      <td>0.014398</td>
+      <td>0.019362</td>
+      <td>0.020126</td>
       <td>-</td>
       <td>0.016667</td>
-      <td>0.056963</td>
-      <td>0.047214</td>
-      <td>0.055461</td>
+      <td>0.057012</td>
+      <td>0.047247</td>
+      <td>0.05548</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
       <td>0.004783</td>
-      <td>0.092978</td>
-      <td>0.098766</td>
+      <td>0.070927</td>
+      <td>0.068852</td>
       <td>-</td>
       <td>0.051992</td>
-      <td>0.681898</td>
-      <td>0.28084</td>
-      <td>0.470161</td>
+      <td>0.688214</td>
+      <td>0.282399</td>
+      <td>0.476</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.01909</td>
-      <td>0.057443</td>
-      <td>0.037601</td>
+      <td>0.019085</td>
+      <td>0.041321</td>
+      <td>0.037168</td>
       <td>-</td>
-      <td>0.04146</td>
-      <td>0.058854</td>
-      <td>0.054263</td>
-      <td>0.055596</td>
+      <td>0.041461</td>
+      <td>0.059425</td>
+      <td>0.054352</td>
+      <td>0.055628</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move y-axis</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
@@ -468,10 +596,21 @@
       <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
-      <td>0.785117</td>
-      <td>0.256849</td>
-      <td>0.441628</td>
+      <td>0.78543</td>
+      <td>0.371426</td>
+      <td>0.605996</td>
       <td>-</td>
       <td>0.7904</td>
       <td>-</td>
@@ -481,8 +620,8 @@
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
       <td>0.987359</td>
-      <td>0.917455</td>
-      <td>0.911676</td>
+      <td>0.932226</td>
+      <td>0.934813</td>
       <td>-</td>
       <td>0.947993</td>
       <td>-</td>
@@ -492,8 +631,8 @@
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
       <td>0.012641</td>
-      <td>0.082545</td>
-      <td>0.088324</td>
+      <td>0.067774</td>
+      <td>0.065187</td>
       <td>-</td>
       <td>0.052007</td>
       <td>-</td>
@@ -502,9 +641,9 @@
     </tr>
     <tr>
       <th>G.T. relative error</th>
-      <td>0.002621</td>
-      <td>0.004617</td>
-      <td>0.004652</td>
+      <td>0.002625</td>
+      <td>0.004176</td>
+      <td>0.004175</td>
       <td>-</td>
       <td>0.003727</td>
       <td>-</td>
@@ -514,19 +653,19 @@
     <tr>
       <th>Max abs. error [m]</th>
       <td>0.155311</td>
-      <td>6.58406</td>
-      <td>4.43921</td>
+      <td>3.36102</td>
+      <td>2.83369</td>
       <td>-</td>
-      <td>1.37865</td>
+      <td>1.37864</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.012786</td>
-      <td>0.021767</td>
-      <td>0.022502</td>
+      <td>0.012801</td>
+      <td>0.018682</td>
+      <td>0.019383</td>
       <td>-</td>
       <td>0.015963</td>
       <td>-</td>
@@ -535,9 +674,9 @@
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.012803</td>
-      <td>0.089971</td>
-      <td>0.09688</td>
+      <td>0.012802</td>
+      <td>0.072701</td>
+      <td>0.069733</td>
       <td>-</td>
       <td>0.05486</td>
       <td>-</td>
@@ -546,9 +685,9 @@
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.020391</td>
-      <td>0.059406</td>
-      <td>0.040212</td>
+      <td>0.020419</td>
+      <td>0.042086</td>
+      <td>0.037381</td>
       <td>-</td>
       <td>0.038767</td>
       <td>-</td>
@@ -574,17 +713,6 @@
   <tbody>
     <tr>
       <th rowspan="11" valign="top">Move 6 DoF</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
@@ -607,106 +735,106 @@
       <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
       <td>0.57734</td>
-      <td>0.277227</td>
-      <td>0.393324</td>
+      <td>0.280231</td>
+      <td>0.396331</td>
       <td>-</td>
       <td>0.419456</td>
-      <td>0.647663</td>
+      <td>0.669587</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
-      <td>0.824706</td>
-      <td>0.836878</td>
-      <td>0.834444</td>
+      <td>0.8247</td>
+      <td>0.83507</td>
+      <td>0.832943</td>
       <td>-</td>
       <td>0.756312</td>
-      <td>0.559952</td>
+      <td>0.548841</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
-      <td>0.175294</td>
-      <td>0.163122</td>
-      <td>0.165556</td>
+      <td>0.1753</td>
+      <td>0.16493</td>
+      <td>0.167057</td>
       <td>-</td>
       <td>0.243688</td>
-      <td>0.440048</td>
+      <td>0.451159</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
       <td>0.008873</td>
-      <td>0.00853</td>
-      <td>0.009191</td>
+      <td>0.007645</td>
+      <td>0.0081</td>
       <td>-</td>
       <td>0.008005</td>
-      <td>0.01325</td>
+      <td>0.01413</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.16228</td>
-      <td>13.2318</td>
-      <td>13.1798</td>
+      <td>3.90761</td>
+      <td>3.94364</td>
       <td>-</td>
-      <td>2.20611</td>
-      <td>1.58192</td>
+      <td>2.2061</td>
+      <td>3.42342</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.023977</td>
-      <td>0.024905</td>
-      <td>0.025018</td>
+      <td>0.025019</td>
+      <td>0.025052</td>
       <td>-</td>
-      <td>0.032756</td>
-      <td>0.052905</td>
+      <td>0.032758</td>
+      <td>0.054082</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.212553</td>
-      <td>0.194917</td>
-      <td>0.198403</td>
+      <td>0.212562</td>
+      <td>0.197504</td>
+      <td>0.200563</td>
       <td>-</td>
       <td>0.322206</td>
-      <td>0.785867</td>
+      <td>0.822023</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.111051</td>
-      <td>0.238903</td>
-      <td>0.257831</td>
+      <td>0.117287</td>
+      <td>0.142686</td>
       <td>-</td>
       <td>0.074328</td>
-      <td>0.119846</td>
+      <td>0.131987</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move Toward Ground</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
@@ -729,106 +857,106 @@
       <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move Toward Ground/debug/0.png" target="_blank">Image</a></td>
     </tr>
     <tr>
-      <th>Fraction estimated px</th>
-      <td>0.567285</td>
-      <td>0.278542</td>
-      <td>0.399577</td>
-      <td>-</td>
-      <td>0.408151</td>
-      <td>0.614648</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction inliers (error < 6 cm)</th>
-      <td>0.737499</td>
-      <td>0.7793</td>
-      <td>0.770533</td>
-      <td>-</td>
-      <td>0.582423</td>
-      <td>0.483923</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Fraction outliers (error >= 6 cm)</th>
-      <td>0.262501</td>
-      <td>0.2207</td>
-      <td>0.229467</td>
-      <td>-</td>
-      <td>0.417577</td>
-      <td>0.516077</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>G.T. relative error</th>
-      <td>0.010136</td>
-      <td>0.008787</td>
-      <td>0.010141</td>
-      <td>-</td>
-      <td>0.017311</td>
-      <td>0.01564</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Max abs. error [m]</th>
-      <td>1.14725</td>
-      <td>8.92226</td>
-      <td>10.0593</td>
-      <td>-</td>
-      <td>10.2779</td>
-      <td>2.54006</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Median abs. error [m]</th>
-      <td>0.033455</td>
-      <td>0.031</td>
-      <td>0.031595</td>
-      <td>-</td>
-      <td>0.04911</td>
-      <td>0.061997</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>Outliers / inliers</th>
-      <td>0.355933</td>
-      <td>0.283203</td>
-      <td>0.297803</td>
-      <td>-</td>
-      <td>0.716966</td>
-      <td>1.06644</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th>RMSE [m]</th>
-      <td>0.101924</td>
-      <td>0.169418</td>
-      <td>0.235052</td>
-      <td>-</td>
-      <td>0.355707</td>
-      <td>0.138843</td>
-      <td>-</td>
-      <td>-</td>
-    </tr>
-    <tr>
-      <th rowspan="11" valign="top">Move x-axis</th>
-      <th>Complete failure</th>
+      <th>Failure</th>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>1</td>
+      <td>1</td>
     </tr>
     <tr>
+      <th>Fraction estimated px</th>
+      <td>0.567282</td>
+      <td>0.284831</td>
+      <td>0.408743</td>
+      <td>-</td>
+      <td>0.408151</td>
+      <td>0.636855</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error < 6 cm)</th>
+      <td>0.737504</td>
+      <td>0.786716</td>
+      <td>0.773918</td>
+      <td>-</td>
+      <td>0.582423</td>
+      <td>0.478087</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error >= 6 cm)</th>
+      <td>0.262496</td>
+      <td>0.213284</td>
+      <td>0.226082</td>
+      <td>-</td>
+      <td>0.417577</td>
+      <td>0.521913</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>G.T. relative error</th>
+      <td>0.010136</td>
+      <td>0.008101</td>
+      <td>0.009213</td>
+      <td>-</td>
+      <td>0.017311</td>
+      <td>0.016202</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.14725</td>
+      <td>3.77064</td>
+      <td>4.14497</td>
+      <td>-</td>
+      <td>10.278</td>
+      <td>3.29236</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.033455</td>
+      <td>0.030213</td>
+      <td>0.031139</td>
+      <td>-</td>
+      <td>0.049111</td>
+      <td>0.06298</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.355925</td>
+      <td>0.271107</td>
+      <td>0.292126</td>
+      <td>-</td>
+      <td>0.716966</td>
+      <td>1.09167</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.101924</td>
+      <td>0.10282</td>
+      <td>0.156352</td>
+      <td>-</td>
+      <td>0.355706</td>
+      <td>0.147517</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move x-axis</th>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
@@ -851,106 +979,106 @@
       <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
       <td>0.814352</td>
-      <td>0.178366</td>
-      <td>0.352103</td>
+      <td>0.296341</td>
+      <td>0.523281</td>
       <td>-</td>
       <td>0.716738</td>
-      <td>0.815824</td>
-      <td>0.705843</td>
-      <td>0.62597</td>
+      <td>0.837057</td>
+      <td>0.70776</td>
+      <td>0.640225</td>
     </tr>
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
       <td>0.915095</td>
-      <td>0.889652</td>
-      <td>0.894902</td>
+      <td>0.924309</td>
+      <td>0.930308</td>
       <td>-</td>
       <td>0.942364</td>
-      <td>0.567486</td>
-      <td>0.741715</td>
-      <td>0.640599</td>
+      <td>0.559356</td>
+      <td>0.741253</td>
+      <td>0.633114</td>
     </tr>
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
       <td>0.084905</td>
-      <td>0.110348</td>
-      <td>0.105098</td>
+      <td>0.075691</td>
+      <td>0.069692</td>
       <td>-</td>
       <td>0.057636</td>
-      <td>0.432514</td>
-      <td>0.258285</td>
-      <td>0.359401</td>
+      <td>0.440644</td>
+      <td>0.258747</td>
+      <td>0.366886</td>
     </tr>
     <tr>
       <th>G.T. relative error</th>
-      <td>0.00936</td>
-      <td>0.006706</td>
-      <td>0.00732</td>
+      <td>0.009361</td>
+      <td>0.005463</td>
+      <td>0.005914</td>
       <td>-</td>
       <td>0.010277</td>
-      <td>0.010566</td>
-      <td>0.009662</td>
-      <td>0.010663</td>
+      <td>0.010862</td>
+      <td>0.009656</td>
+      <td>0.010899</td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.29347</td>
-      <td>10.1668</td>
-      <td>14.1442</td>
+      <td>4.39407</td>
+      <td>3.99031</td>
       <td>-</td>
-      <td>16.5203</td>
-      <td>1.16742</td>
+      <td>16.5204</td>
+      <td>2.26725</td>
       <td>1.41769</td>
-      <td>1.35993</td>
+      <td>2.26725</td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.01458</td>
-      <td>0.022466</td>
-      <td>0.02263</td>
+      <td>0.014582</td>
+      <td>0.019577</td>
+      <td>0.020132</td>
       <td>-</td>
       <td>0.014883</td>
-      <td>0.057622</td>
-      <td>0.048555</td>
-      <td>0.055999</td>
+      <td>0.057862</td>
+      <td>0.048573</td>
+      <td>0.056138</td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
       <td>0.092783</td>
-      <td>0.124035</td>
-      <td>0.117441</td>
+      <td>0.08189</td>
+      <td>0.074913</td>
       <td>-</td>
       <td>0.061161</td>
-      <td>0.762157</td>
-      <td>0.348226</td>
-      <td>0.561038</td>
+      <td>0.787771</td>
+      <td>0.349068</td>
+      <td>0.579494</td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
       <td>0.157578</td>
-      <td>0.174009</td>
-      <td>0.242911</td>
+      <td>0.099444</td>
+      <td>0.137384</td>
       <td>-</td>
-      <td>0.468071</td>
-      <td>0.080154</td>
-      <td>0.084905</td>
-      <td>0.078097</td>
+      <td>0.468072</td>
+      <td>0.084486</td>
+      <td>0.08476</td>
+      <td>0.081705</td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move y-axis</th>
-      <th>Complete failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
       <th>Debug depth</th>
       <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
       <td><a href="sfm_results/EPL Search (Patch Match NCC)/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
@@ -973,12 +1101,23 @@
       <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
     </tr>
     <tr>
+      <th>Failure</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>Fraction estimated px</th>
       <td>0.819805</td>
-      <td>0.172679</td>
-      <td>0.372979</td>
+      <td>0.257777</td>
+      <td>0.506097</td>
       <td>-</td>
-      <td>0.725023</td>
+      <td>0.725026</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -986,10 +1125,10 @@
     <tr>
       <th>Fraction inliers (error < 6 cm)</th>
       <td>0.923342</td>
-      <td>0.893468</td>
-      <td>0.901209</td>
+      <td>0.916495</td>
+      <td>0.927739</td>
       <td>-</td>
-      <td>0.945952</td>
+      <td>0.945948</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -997,10 +1136,10 @@
     <tr>
       <th>Fraction outliers (error >= 6 cm)</th>
       <td>0.076658</td>
-      <td>0.106532</td>
-      <td>0.098791</td>
+      <td>0.083505</td>
+      <td>0.072261</td>
       <td>-</td>
-      <td>0.054048</td>
+      <td>0.054052</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -1008,8 +1147,8 @@
     <tr>
       <th>G.T. relative error</th>
       <td>0.007591</td>
-      <td>0.008068</td>
-      <td>0.00836</td>
+      <td>0.005859</td>
+      <td>0.005552</td>
       <td>-</td>
       <td>0.010766</td>
       <td>-</td>
@@ -1019,8 +1158,8 @@
     <tr>
       <th>Max abs. error [m]</th>
       <td>1.36571</td>
-      <td>18.0368</td>
-      <td>18.0368</td>
+      <td>4.31013</td>
+      <td>4.31013</td>
       <td>-</td>
       <td>17.996</td>
       <td>-</td>
@@ -1030,10 +1169,10 @@
     <tr>
       <th>Median abs. error [m]</th>
       <td>0.014374</td>
-      <td>0.021974</td>
-      <td>0.022184</td>
+      <td>0.019153</td>
+      <td>0.019496</td>
       <td>-</td>
-      <td>0.014994</td>
+      <td>0.014993</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -1041,10 +1180,10 @@
     <tr>
       <th>Outliers / inliers</th>
       <td>0.083022</td>
-      <td>0.119235</td>
-      <td>0.109621</td>
+      <td>0.091113</td>
+      <td>0.077889</td>
       <td>-</td>
-      <td>0.057136</td>
+      <td>0.057141</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -1052,10 +1191,10 @@
     <tr>
       <th>RMSE [m]</th>
       <td>0.13104</td>
-      <td>0.302252</td>
-      <td>0.376066</td>
+      <td>0.106523</td>
+      <td>0.105724</td>
       <td>-</td>
-      <td>0.566997</td>
+      <td>0.566996</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>

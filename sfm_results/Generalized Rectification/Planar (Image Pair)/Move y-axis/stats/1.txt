@@ -1,4 +1,4 @@
-complete_failure:1
+status:failure
 frac_estimated:0.000000
 rmse:-1.000000
 median_error:-1.000000
