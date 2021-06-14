@@ -134,7 +134,7 @@ def generate_timeseries_plot(data, column, ymin=None, ymax=None, title=None):
   for method, df in data.items():
     x = df['Frame ID']
     y = df[column]
-    ax.plot(x, y, label=method)
+    ax.plot(x, y, label=method, linewidth=0.7)
   ax.legend()
   ax.set_xlabel('Image sequence number')
   ax.set_ylabel(column)
