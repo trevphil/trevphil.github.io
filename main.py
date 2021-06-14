@@ -16,6 +16,7 @@ plt.rcParams.update({
     "font.family": "DejaVu Sans",
     "font.serif": ["Palatino"],
 })
+plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
 #################################################################
 #################################################################
@@ -137,7 +138,8 @@ def generate_timeseries_plot(data, column, ymin=None, ymax=None, title=None):
     ax.plot(x, y, label=method, linewidth=0.7)
   ax.legend()
   ax.set_xlabel('Image sequence number')
-  ax.set_ylabel(column)
+  ylabel = column.replace('%', '\%').replace('<=', '$\le$').replace('>=', '$\ge$').replace('<', '$<$').replace('>', '$>$')
+  ax.set_ylabel(ylabel)
   if (ymin is not None) and (ymax is not None):
     ax.set_ylim(ymin, ymax)
   if title is not None:
