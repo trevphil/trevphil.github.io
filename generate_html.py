@@ -4,6 +4,17 @@ import numpy as np
 import pandas as pd
 import webbrowser
 
+def get_color_name(i):
+  colors = [
+    'AliceBlue',
+    'AntiqueWhite',
+    'LightGoldenRodYellow',
+    'PaleGoldenRod',
+    'PeachPuff',
+    'Snow',
+  ]
+  return colors[i % len(colors)]
+
 def image_path_to_link(p):
   return f"<a href=\"{p}\" target=\"_blank\">Image</a>"
 
@@ -31,13 +42,14 @@ def render_html(test_sets):
   info = info_table()
   html += info.to_html(escape=False)
 
+  i = 0
   for test_set_name, df in test_sets.items():
     html += f"<hr/><br/><p><b>{test_set_name}</b></p><br/>"
+    html += f'<div style="background-color:{get_color_name(i)};">'
     html += df.to_html(escape=False)
-  html += '<hr/><br/><img src="success.jpg" alt="">'
-  html += '<hr/><br/><img src="rmse.jpg" alt="">'
-  html += '<hr/><br/><img src="outliers.jpg" alt="">'
-  html += "</body></html>"
+    html += '</div>'
+    i += 1
+  html += '</body></html>'
 
   output_file = 'index.html'
   with open(output_file, 'w') as f:

@@ -6,9 +6,20 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from pathlib import Path
 from collections import defaultdict
+import uuid
+from tqdm import tqdm
 
 from generate_html import render_html, image_path_to_link
 
+plt.rcParams.update({
+    "text.usetex": True,
+    "font.family": "DejaVu Sans",
+    "font.serif": ["Palatino"],
+})
+
+#################################################################
+#################################################################
+#################################################################
 
 def get_subdirectories(basepath):
   x = [d for d in basepath.iterdir() if d.is_dir()]
@@ -20,71 +31,17 @@ def get_files(basepath):
   return list(sorted(x))
 
 
-def parse_stats_file(filepath):
+def parse_summary_file(filepath):
   stats = defaultdict(lambda: np.nan)
   with open(filepath, 'r') as f:
     for line in f:
       name, val = line.split(':')[:2]
-      name = name.strip()
-      val = val.strip()
-      if name == 'status':
-        if val == 'success':
-          stats['failure'] = 0.0
-        elif val == 'failure' or val == 'not_enough_points':
-          stats['failure'] = 1.0
-        elif val == 'no_new_image':
-          stats['failure'] = np.nan
-        else:
-          assert False, 'Unknown status: %s' % val
-      else:
-        stats[name] = float(val)
+      stats[name.strip()] = float(val.strip())
   return stats
 
-
-def parse_stats(stats_files):
-  if len(stats_files) == 1:
-    combined_stats = parse_stats_file(stats_files[0])
-  else:
-    all_stats = [parse_stats_file(f) for f in stats_files]
-    did_not_fail = [s for s in all_stats if s['failure'] != 1]
-    succeeded = [s for s in all_stats if s['failure'] == 0]
-    n = float(len(all_stats))
-    n_failed = n - float(len(did_not_fail))
-    combined_stats = defaultdict(lambda: np.nan)
-    combined_stats['failure'] = n_failed / n
-
-    meank = lambda k: np.mean([s[k] for s in succeeded])
-    mediank = lambda k: np.median([s[k] for s in succeeded])
-    maxk = lambda k: np.max([s[k] for s in succeeded])
-
-    if len(succeeded) > 0:
-      combined_stats['frac_estimated'] = meank('frac_estimated')
-      combined_stats['frac_inliers'] = meank('frac_inliers')
-      combined_stats['frac_outliers'] = 1.0 - combined_stats['frac_inliers']
-      combined_stats['outliers_over_inliers'] = \
-        combined_stats['frac_outliers'] / combined_stats['frac_inliers']
-      combined_stats['max_error'] = maxk('max_error')
-      combined_stats['median_error'] = mediank('median_error')
-      combined_stats['rmse'] = meank('rmse')
-      combined_stats['mean_relative_error'] = meank('mean_relative_error')
-
-  key2name = {
-    'failure': 'Failure',
-    'frac_estimated': 'Fraction estimated px',
-    'frac_inliers': 'Fraction inliers (error < 6 cm)',
-    'frac_outliers': 'Fraction outliers (error >= 6 cm)',
-    'outliers_over_inliers': 'Outliers / inliers',
-    'max_error': 'Max abs. error [m]',
-    'median_error': 'Median abs. error [m]',
-    'rmse': 'RMSE [m]',
-    'mean_relative_error': 'G.T. relative error'
-  }
-  final_output = defaultdict(lambda: np.nan)
-  for k, val in combined_stats.items():
-    name = key2name.get(k, k)
-    final_output[name] = val
-  return final_output
-
+#################################################################
+#################################################################
+#################################################################
 
 if os.path.exists('./sfm_results'):
   response = input('Delete existing results? [y/n] ')
@@ -100,6 +57,9 @@ else:
     exit()
   shutil.copytree('/tmp/sfm_results', './sfm_results')
 
+for f in os.listdir('./plots'):
+  if f.endswith('.png'):
+    os.remove(os.path.join('./plots', f))
 
 basepath = Path('./sfm_results')
 stereo_method_dirs = get_subdirectories(basepath)
@@ -123,77 +83,88 @@ if len(test_dirs) == 0:
 
 print(f'Found {len(test_dirs)} total test(s)!')
 
+#################################################################
+#################################################################
+#################################################################
+
+stereo_methods = set()
+test_set_names = set()
+motions = set()
+
+for test_dir in test_dirs:
+  motion = test_dir.parts[-1]
+  test_set_name = test_dir.parts[-2]
+  stereo_method = test_dir.parts[-3]
+
+  motions.add(motion)
+  test_set_names.add(test_set_name)
+  stereo_methods.add(stereo_method)
+
+stereo_methods = list(sorted(stereo_methods))
+test_set_names = list(sorted(test_set_names))
+motions = list(sorted(motions))
+
+tmp_stats = parse_summary_file(test_dirs[0] / 'stats'/ 'summary.txt')
+stat_names = set(tmp_stats.keys())
+stat_names.add('Debug stereo')
+stat_names.add('Debug depth')
+stat_names = list(sorted(stat_names))
+
+#################################################################
+#################################################################
+#################################################################
 
 def make_dataframe():
-  stereo_methods = set()
-  test_set_names = set()
-  motions = set()
-
-  for test_dir in test_dirs:
-    motion = test_dir.parts[-1]
-    test_set_name = test_dir.parts[-2]
-    stereo_method = test_dir.parts[-3]
-
-    motions.add(motion)
-    test_set_names.add(test_set_name)
-    stereo_methods.add(stereo_method)
-
-  stereo_methods = list(sorted(stereo_methods))
-  test_set_names = list(sorted(test_set_names))
-  motions = list(sorted(motions))
-
-  tmp_stats_files = get_files(test_dirs[0] / 'stats')
-  tmp_stats = parse_stats(tmp_stats_files)
-  stat_names = set(tmp_stats.keys())
-  stat_names.add('Debug stereo')
-  stat_names.add('Debug depth')
-  stat_names = list(sorted(stat_names))
-
   cols = stereo_methods
   rows = pd.MultiIndex.from_product([motions, stat_names])
   df = pd.DataFrame('-', rows, cols)
   return df
 
+#################################################################
+#################################################################
+#################################################################
 
-def get_stats_through_time(stats_files):
-  did_fail = dict()
-  rmse = dict()
-  outliers = dict()
-  for stats_file in stats_files:
-    idx = int(stats_file.parts[-1].split('.')[0])
-    stats = parse_stats_file(stats_file)
-    if np.isnan(stats['failure']):
-      # Means that `idx` was not used as a keyframe
-      did_fail[idx] = 0
-    else:
-      # Otherwise stats['failure'] should be either 0 or 1
-      failed = int(stats['failure'])
-      did_fail[idx] = failed
-      if failed == 1:
-        rmse[idx] = np.nan
-        outliers[idx] = np.nan
-      else:
-        rmse[idx] = stats['rmse']
-        outliers[idx] = stats['frac_outliers']
-  return did_fail, rmse, outliers
+def parse_timeseries_file(filename):
+  df = pd.read_csv(filename)
+  df[df['Status'] != 'success'] = np.nan
+  return df
 
+def generate_timeseries_plot(data, column, ymin=None, ymax=None, title=None):
+  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+  for method, df in data.items():
+    x = df['Frame ID']
+    y = df[column]
+    ax.plot(x, y, label=method)
+  ax.legend()
+  ax.set_xlabel('Image sequence number')
+  ax.set_ylabel(column)
+  if (ymin is not None) and (ymax is not None):
+    ax.set_ylim(ymin, ymax)
+  if title is not None:
+    ax.set_title(title)
+  filename = './plots/%s.pdf' % str(uuid.uuid1())
+  plt.savefig(filename)
+  plt.close(fig=fig)
+  return Path(filename)
 
-test_sets = defaultdict(lambda: make_dataframe())
-failure_per_method = dict()
-rmse_per_method = dict()
-frac_outliers_per_method = dict()
+#################################################################
+#################################################################
+#################################################################
 
-for test_dir in test_dirs:
-  stats_files = get_files(test_dir / 'stats')
+test_sets = defaultdict(lambda: make_dataframe())  # Test set name --> table of results (dataframe)
+timeseries = defaultdict(lambda: dict())  # (test set, motion) --> dict from (method name --> timeseries)
+timeseries_cols = None
+blacklisted_ts_cols = ('Frame ID', 'Failure', 'Status')
+
+for test_dir in tqdm(test_dirs):
   debug_image_files = get_files(test_dir / 'debug')
   depth_image_files = get_files(test_dir / 'depth')
 
-  if len(stats_files) == 0:
+  if len(get_files(test_dir / 'stats')) == 0:
     print(f'No results for "{test_dir}"')
     sys.exit(1)
 
-  stats = parse_stats(stats_files)
-  stat_names = list(sorted(stats.keys()))
+  stats = parse_summary_file(test_dir / 'stats' / 'summary.txt')
 
   motion = test_dir.parts[-1]
   test_set_name = test_dir.parts[-2]
@@ -204,8 +175,7 @@ for test_dir in test_dirs:
   if stats['Failure'] == 1:
     df[stereo_method][motion]['Failure'] = 1
   else:
-    for stat_name in stat_names:
-      stat_value = stats[stat_name]
+    for stat_name, stat_value in stats.items():
       df[stereo_method][motion][stat_name] = stat_value
 
   if len(debug_image_files) == 1:
@@ -213,14 +183,30 @@ for test_dir in test_dirs:
   if len(depth_image_files) == 1:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
-  if len(stats_files) > 1:
-    failures, rmse_errors, outliers = get_stats_through_time(stats_files)
-    failure_per_method[stereo_method] = failures
-    rmse_per_method[stereo_method] = rmse_errors
-    frac_outliers_per_method[stereo_method] = outliers
+  ts = parse_timeseries_file(test_dir / 'stats' / 'timeseries.csv')
+  if len(ts) > 1:
+    timeseries[(test_set_name, motion)][stereo_method] = ts
+    ts_cols = set([c for c in ts.columns if c not in blacklisted_ts_cols])
+    if timeseries_cols is None:
+      timeseries_cols = ts_cols
+    else:
+      timeseries_cols = timeseries_cols.intersection(ts_cols)
 
+# Generate timeseries plots and add to summary tables
+print('Generating plots...')
+timeseries_cols = list(sorted(timeseries_cols))
+for (test_set_name, motion), method2timeseries in timeseries.items():
+  title = '%s: %s' % (test_set_name, motion)
+  df = test_sets[test_set_name]
+  if 'Timeseries' not in df.columns:
+    df['Timeseries'] = '-'
+  for col in timeseries_cols:
+    image_path = generate_timeseries_plot(method2timeseries, col, title=title)
+    df['Timeseries'][motion][col] = image_path_to_link(image_path)
+  test_sets[test_set_name] = df
 
 # Remove (outer) rows in each dataframe which have no data
+print('Removing empty rows...')
 all_motions = set([t.parts[-1] for t in test_dirs])
 for test_set_name, df in test_sets.items():
   for m in all_motions:
@@ -228,59 +214,6 @@ for test_set_name, df in test_sets.items():
     if no_data:
       df = df.drop(m, level=0)
   test_sets[test_set_name] = df
-
-
-if len(failure_per_method) > 0:
-  indices = set()
-  for method, did_fail in failure_per_method.items():
-    indices = set(did_fail.keys()).union(indices)
-  indices = np.array(list(indices))
-  tmin = int(np.min(indices))
-  tmax = int(np.max(indices)) + 1
-
-  fig, axs = plt.subplots(len(failure_per_method), 1,
-                          figsize=(10, 7))
-  if len(failure_per_method) == 1:
-    axs = (axs, )
-
-  i = 0
-  for method, did_fail in failure_per_method.items():
-    x = list(sorted(did_fail.keys()))
-    y = [(1 - did_fail[t]) for t in x]
-    axs[i].plot(x, y, label=method)
-    axs[i].legend()
-    axs[i].set_xlabel('Image sequence number')
-    axs[i].set_ylabel('Success?')
-    axs[i].set_yticks([0, 1])
-    axs[i].set_xlim(tmin, tmax)
-    i += 1
-
-  plt.tight_layout()
-  plt.savefig('success.jpg')
-
-  max_rmse = 1.0
-
-  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
-  for method, rmse in rmse_per_method.items():
-    x = list(sorted(rmse.keys()))
-    y = [min(rmse[t], max_rmse) for t in x]
-    ax.plot(x, y, label=method)
-  ax.legend()
-  ax.set_xlim(tmin, tmax)
-  ax.set_xlabel('Image sequence number')
-  ax.set_ylabel('RMSE [m]')
-  plt.savefig('rmse.jpg')
-
-  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
-  for method, outliers in frac_outliers_per_method.items():
-    x = list(sorted(outliers.keys()))
-    y = [outliers[t] for t in x]
-    ax.plot(x, y, label=method)
-  ax.legend()
-  ax.set_xlim(tmin, tmax)
-  ax.set_xlabel('Image sequence number')
-  ax.set_ylabel('Fraction outlier px (error >= 6 cm)')
-  plt.savefig('outliers.jpg')
 
 
 render_html(test_sets)

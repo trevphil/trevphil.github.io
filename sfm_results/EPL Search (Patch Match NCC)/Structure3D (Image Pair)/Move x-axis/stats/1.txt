@@ -1,9 +1,0 @@
-status:success
-frac_estimated:0.296341
-rmse:0.099444
-median_error:0.019577
-max_error:4.394072
-mean_relative_error:0.005463
-frac_inliers:0.924309
-frac_outliers:0.075691
-outliers_over_inliers:0.081890
