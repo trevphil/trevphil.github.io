@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head></head><body><table border="1" class="dataframe">
+<!DOCTYPE html><html><head></head><body><h4>The following metrics are computed on a <em>per-frame</em> basis (i.e. each time stereo runs on an image pair):</h4><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -16,7 +16,7 @@
     </tr>
     <tr>
       <th>Failure</th>
-      <td>1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 10% of the image is "covered".</td>
+      <td>1 if stereo failed OR if when projecting all estimated 3D points into the nearest (integer) pixel coordinate in the depth image, less than 1.0% of the image is "covered".</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <th>Fraction inliers</th>
-      <td>The fraction of estimated points with an error below 6 cm. Based on estimated vs. true ray length from camera origin to surface.</td>
+      <td>The fraction of estimated points with relative error below 1.0%. Based on estimated vs. true ray length from camera origin to surface.</td>
     </tr>
     <tr>
       <th>Fraction outliers</th>
@@ -51,17 +51,27 @@
       <td>Root mean squared error of estimated vs. ground truth depth. Based on estimated vs. true ray length from camera origin to surface.</td>
     </tr>
   </tbody>
-</table><hr/><br/><p><b>AirSim</b></p><br/><div style="background-color:AliceBlue;"><table border="1" class="dataframe">
+</table><hr/><br/><h4>
+  Values reported in the tables show μ ± 1-σ for each metric, when averaged over all
+  frames (if the test is composed of more than 1 stereo image pair) and all trials.
+
+  If a test had artificial noise added (pose or image noise), 50 Monte Carlo trials were run.
+  Otherwise for tests without noise, only 1 trial was run.
+
+  The <em>Timeseries</em> plots show each metric over time, with dotted lines indicating ± 3-σ.
+  The <em>Boxplot</em> plots show quartiles Q0, Q1, Q2, Q3, and Q4 for each metric, from all frames and trials.
+  </h4><hr/><br/><p><b>AirSim Rocks [No Noise]</b></p><br/><div style="background-color:AliceBlue;"><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
       <th></th>
       <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
       <th>EPL Search (Patch Match SSD)</th>
       <th>Generalized Rectification</th>
       <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
       <th>Timeseries</th>
+      <th>Boxplot</th>
     </tr>
   </thead>
   <tbody>
@@ -74,6 +84,7 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
@@ -83,87 +94,97 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0.005</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.584549</td>
-      <td>0.274239</td>
+      <td>0.584549 ± 0.0052818</td>
+      <td>0.423955 ± 0.0117173</td>
+      <td>0.274239 ± 0.0062861</td>
       <td>-</td>
-      <td>0.647699</td>
-      <td>-</td>
-      <td><a href="plots/fba7194a-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.647699 ± 0.016223</td>
+      <td><a href="plots/7cd3bed4-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/851aec7c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.974129</td>
-      <td>0.990564</td>
+      <td>0.974129 ± 0.00475961</td>
+      <td>0.896259 ± 0.0115634</td>
+      <td>0.990564 ± 0.00240351</td>
       <td>-</td>
-      <td>0.974087</td>
-      <td>-</td>
-      <td><a href="plots/fba7194b-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.974087 ± 0.00591961</td>
+      <td><a href="plots/7cd3bed5-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/851aec7d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.0258713</td>
-      <td>0.00943585</td>
+      <td>0.0258713 ± 0.00475961</td>
+      <td>0.103741 ± 0.0115634</td>
+      <td>0.00943585 ± 0.00240351</td>
       <td>-</td>
-      <td>0.0259132</td>
-      <td>-</td>
-      <td><a href="plots/fba7194c-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0259132 ± 0.00591961</td>
+      <td><a href="plots/7cd3bed6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/851aec7e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.81616</td>
-      <td>0.885147</td>
+      <td>0.953146 ± 0.337797</td>
+      <td>1.67109 ± 0.301444</td>
+      <td>1.09788 ± 0.409311</td>
       <td>-</td>
-      <td>0.804072</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfde-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.837489 ± 0.0798426</td>
+      <td><a href="plots/7cd3bed7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e68-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00227266</td>
-      <td>0.00229753</td>
+      <td>0.00227266 ± 0.00030034</td>
+      <td>0.00506158 ± 0.000239898</td>
+      <td>0.00229753 ± 0.000110661</td>
       <td>-</td>
-      <td>0.00348146</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfdf-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.00348146 ± 0.000258416</td>
+      <td><a href="plots/7cd3bed8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e69-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.00679334</td>
-      <td>0.00817251</td>
+      <td>0.00532002 ± 0.000727524</td>
+      <td>0.0157672 ± 0.00099476</td>
+      <td>0.00746427 ± 0.000516377</td>
       <td>-</td>
-      <td>0.0105195</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfe0-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0106208 ± 0.000478284</td>
+      <td><a href="plots/7cd3bed9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e6a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.0265584</td>
-      <td>0.00952573</td>
+      <td>0.0265828 ± 0.00501823</td>
+      <td>0.115935 ± 0.0145148</td>
+      <td>0.00953165 ± 0.00245327</td>
       <td>-</td>
-      <td>0.0266025</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfe1-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0266401 ± 0.00622533</td>
+      <td><a href="plots/7e1cd0c8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e6b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0322028</td>
-      <td>0.0175966</td>
+      <td>0.0322028 ± 0.00645707</td>
+      <td>0.0426845 ± 0.00309442</td>
+      <td>0.0175966 ± 0.00237389</td>
       <td>-</td>
-      <td>0.0351487</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfe2-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0351487 ± 0.00756348</td>
+      <td><a href="plots/7e1cd0c9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e6c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Ascent</th>
@@ -174,6 +195,7 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
@@ -183,87 +205,97 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0.005</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.260371</td>
-      <td>0.281182</td>
+      <td>0.260371 ± 0.0568719</td>
+      <td>0.383017 ± 0.0207807</td>
+      <td>0.281182 ± 0.0112289</td>
       <td>-</td>
-      <td>0.17551</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfe3-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.17551 ± 0.00551747</td>
+      <td><a href="plots/7e1cd0ca-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e6d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.686109</td>
-      <td>0.900166</td>
+      <td>0.686109 ± 0.0189401</td>
+      <td>0.672939 ± 0.0843935</td>
+      <td>0.900166 ± 0.0401706</td>
       <td>-</td>
-      <td>0.703717</td>
-      <td>-</td>
-      <td><a href="plots/fc84bfe4-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.703717 ± 0.0729852</td>
+      <td><a href="plots/7e1cd0cb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/86532e6e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.313891</td>
-      <td>0.0998337</td>
+      <td>0.313891 ± 0.0189401</td>
+      <td>0.327061 ± 0.0843935</td>
+      <td>0.0998337 ± 0.0401706</td>
       <td>-</td>
-      <td>0.296283</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4090-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.296283 ± 0.0729852</td>
+      <td><a href="plots/7e1cd0cc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4ca6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.584612</td>
-      <td>1.15913</td>
+      <td>3.13987 ± 8.43949</td>
+      <td>1.20664 ± 0.135493</td>
+      <td>1.08749 ± 0.512863</td>
       <td>-</td>
-      <td>0.412583</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4091-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.471856 ± 0.178356</td>
+      <td><a href="plots/7e1cd0cd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4ca7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00935376</td>
-      <td>0.00455008</td>
+      <td>0.00935376 ± 0.000584641</td>
+      <td>0.00970008 ± 0.00169748</td>
+      <td>0.00455008 ± 0.00102734</td>
       <td>-</td>
-      <td>0.0089897</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4092-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0089897 ± 0.00163774</td>
+      <td><a href="plots/7f3da93c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4ca8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0226345</td>
-      <td>0.0104261</td>
+      <td>0.0229473 ± 0.00504167</td>
+      <td>0.0263021 ± 0.0113024</td>
+      <td>0.011441 ± 0.00509084</td>
       <td>-</td>
-      <td>0.0226427</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4093-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0247832 ± 0.00920902</td>
+      <td><a href="plots/7f3da93d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4ca9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.457494</td>
-      <td>0.110906</td>
+      <td>0.458657 ± 0.042408</td>
+      <td>0.508247 ± 0.17893</td>
+      <td>0.113132 ± 0.0501859</td>
       <td>-</td>
-      <td>0.421026</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4094-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.436781 ± 0.153281</td>
+      <td><a href="plots/7f3da93e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4caa-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0657553</td>
-      <td>0.0277635</td>
+      <td>0.0657553 ± 0.071301</td>
+      <td>0.0590377 ± 0.015905</td>
+      <td>0.0277635 ± 0.0118476</td>
       <td>-</td>
-      <td>0.0470544</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4095-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0470544 ± 0.019769</td>
+      <td><a href="plots/7f3da93f-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4cab-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Horizontal</th>
@@ -274,6 +306,7 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
@@ -283,106 +316,118 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0.005</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.307323</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.587878</td>
-      <td>0.277212</td>
+      <td>0.587878 ± 0.00523762</td>
+      <td>0.448036 ± 0.018699</td>
+      <td>0.277212 ± 0.00807203</td>
       <td>-</td>
-      <td>0.783131</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4096-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.783131 ± 0.00692037</td>
+      <td><a href="plots/7f3da940-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4cac-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.959607</td>
-      <td>0.980189</td>
+      <td>0.959607 ± 0.00457631</td>
+      <td>0.6287 ± 0.0206375</td>
+      <td>0.980189 ± 0.00239484</td>
       <td>-</td>
-      <td>0.906764</td>
-      <td>-</td>
-      <td><a href="plots/fd8d4097-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.906764 ± 0.00274536</td>
+      <td><a href="plots/7f3da941-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/877d4cad-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.0403931</td>
-      <td>0.0198113</td>
+      <td>0.0403931 ± 0.00457631</td>
+      <td>0.3713 ± 0.0206375</td>
+      <td>0.0198113 ± 0.00239484</td>
       <td>-</td>
-      <td>0.0932363</td>
-      <td>-</td>
-      <td><a href="plots/febf2e56-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0932363 ± 0.00274536</td>
+      <td><a href="plots/7f3da942-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c10-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>1.04435</td>
-      <td>1.12186</td>
+      <td>0.641559 ± 0.246013</td>
+      <td>1.26217 ± 0.278144</td>
+      <td>1.11683 ± 0.524312</td>
       <td>-</td>
-      <td>0.94215</td>
-      <td>-</td>
-      <td><a href="plots/febf2e57-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.94002 ± 0.140755</td>
+      <td><a href="plots/806a48f6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c11-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.0026748</td>
-      <td>0.00276594</td>
+      <td>0.0026748 ± 0.00015936</td>
+      <td>0.00913175 ± 0.000393316</td>
+      <td>0.00276594 ± 5.69211e-05</td>
       <td>-</td>
-      <td>0.00721243</td>
-      <td>-</td>
-      <td><a href="plots/febf2e58-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.00721243 ± 0.000117347</td>
+      <td><a href="plots/806a48f7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c12-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.00591149</td>
-      <td>0.0118237</td>
+      <td>0.00611616 ± 0.000292692</td>
+      <td>0.0470315 ± 0.00177293</td>
+      <td>0.0120447 ± 0.000227374</td>
       <td>-</td>
-      <td>0.0381801</td>
-      <td>-</td>
-      <td><a href="plots/febf2e59-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0383593 ± 0.000485415</td>
+      <td><a href="plots/806a48f8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c13-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.0420934</td>
-      <td>0.0202117</td>
+      <td>0.042117 ± 0.00496846</td>
+      <td>0.592314 ± 0.0530508</td>
+      <td>0.0202177 ± 0.00249219</td>
       <td>-</td>
-      <td>0.102823</td>
-      <td>-</td>
-      <td><a href="plots/febf2e5a-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.102833 ± 0.00334226</td>
+      <td><a href="plots/806a48f9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c14-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.043346</td>
-      <td>0.025993</td>
+      <td>0.043346 ± 0.00511072</td>
+      <td>0.0688315 ± 0.00219625</td>
+      <td>0.025993 ± 0.000752131</td>
       <td>-</td>
-      <td>0.0559496</td>
-      <td>-</td>
-      <td><a href="plots/febf2e5b-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.0559496 ± 0.00276552</td>
+      <td><a href="plots/806a48fa-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c15-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
   </tbody>
-</table></div><hr/><br/><p><b>Grand Canyon</b></p><br/><div style="background-color:AntiqueWhite;"><table border="1" class="dataframe">
+</table></div><hr/><br/><p><b>AirSim Rocks [Pose and Image Noise]</b></p><br/><div style="background-color:AntiqueWhite;"><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
       <th></th>
       <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
       <th>EPL Search (Patch Match SSD)</th>
       <th>Generalized Rectification</th>
       <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
       <th>Timeseries</th>
+      <th>Boxplot</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th rowspan="11" valign="top">Descent</th>
+      <th rowspan="11" valign="top">6 DoF</th>
       <th>Debug depth</th>
+      <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
@@ -398,827 +443,1979 @@
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0.005</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
       <td>-</td>
-      <td>0.005</td>
+      <td>0.105 ± 0.306569</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.0353278</td>
-      <td>0.179571</td>
+      <td>0.36591 ± 0.0355805</td>
+      <td>0.204282 ± 0.0125997</td>
+      <td>0.207754 ± 0.0125988</td>
       <td>-</td>
-      <td>0.289694</td>
-      <td>-</td>
-      <td><a href="plots/febf2e5c-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.641574 ± 0.0176035</td>
+      <td><a href="plots/806a48fb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c16-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0</td>
-      <td>2.6354e-05</td>
+      <td>0.955059 ± 0.0143641</td>
+      <td>0.634713 ± 0.029636</td>
+      <td>0.916368 ± 0.0112733</td>
       <td>-</td>
-      <td>0.000148394</td>
-      <td>-</td>
-      <td><a href="plots/febf2e5d-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.884881 ± 0.0169249</td>
+      <td><a href="plots/806a48fc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/88b39c17-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>1</td>
-      <td>0.999974</td>
+      <td>0.0449409 ± 0.0143641</td>
+      <td>0.365287 ± 0.029636</td>
+      <td>0.0836322 ± 0.0112733</td>
       <td>-</td>
-      <td>0.999852</td>
-      <td>-</td>
-      <td><a href="plots/ffe9cdcc-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.115119 ± 0.0169249</td>
+      <td><a href="plots/81a9294e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9c6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>38.9409</td>
-      <td>64.4134</td>
+      <td>0.753215 ± 0.186029</td>
+      <td>1.03225 ± 0.100155</td>
+      <td>1.09615 ± 0.32065</td>
       <td>-</td>
-      <td>12781.8</td>
-      <td>-</td>
-      <td><a href="plots/ffe9cdcd-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.882705 ± 0.116358</td>
+      <td><a href="plots/81a9294f-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9c7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.56496</td>
-      <td>0.584533</td>
+      <td>0.00360178 ± 0.000563118</td>
+      <td>0.0104991 ± 0.000854083</td>
+      <td>0.00458536 ± 0.000277969</td>
       <td>-</td>
-      <td>5.43696</td>
-      <td>-</td>
-      <td><a href="plots/ffe9cdce-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.00542704 ± 0.000453164</td>
+      <td><a href="plots/81a92950-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9c8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>15.6238</td>
-      <td>19.1676</td>
+      <td>0.00845833 ± 0.0011256</td>
+      <td>0.0295415 ± 0.00291576</td>
+      <td>0.0136292 ± 0.000954095</td>
       <td>-</td>
-      <td>45.5656</td>
-      <td>-</td>
-      <td><a href="plots/ffe9cdcf-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.015196 ± 0.00105124</td>
+      <td><a href="plots/81a92951-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9c9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>1e+10</td>
-      <td>37943.9</td>
+      <td>0.0472946 ± 0.0158967</td>
+      <td>0.579202 ± 0.0796071</td>
+      <td>0.0914306 ± 0.01347</td>
       <td>-</td>
-      <td>6737.79</td>
-      <td>-</td>
-      <td><a href="plots/ffe9cdd0-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>0.13051 ± 0.0216892</td>
+      <td><a href="plots/81a92952-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9ca-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>19.0082</td>
-      <td>20.3524</td>
+      <td>0.0397986 ± 0.0109975</td>
+      <td>0.0716917 ± 0.00731671</td>
+      <td>0.0366893 ± 0.00518477</td>
       <td>-</td>
-      <td>943.544</td>
+      <td>0.0444201 ± 0.00724353</td>
+      <td><a href="plots/81a92953-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9cb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Ascent</th>
+      <th>Debug depth</th>
       <td>-</td>
-      <td><a href="plots/ffe9cdd1-cd20-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
+      <td>-</td>
+      <td>0.105 ± 0.306569</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.149367 ± 0.0363045</td>
+      <td>0.182361 ± 0.0304621</td>
+      <td>0.17818 ± 0.0472667</td>
+      <td>-</td>
+      <td>0.12172 ± 0.0132187</td>
+      <td><a href="plots/81a92954-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9cc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.575287 ± 0.0481735</td>
+      <td>0.396577 ± 0.120388</td>
+      <td>0.685885 ± 0.0621539</td>
+      <td>-</td>
+      <td>0.586165 ± 0.0803939</td>
+      <td><a href="plots/82cd827a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/89ebd9cd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.424713 ± 0.0481735</td>
+      <td>0.603423 ± 0.120388</td>
+      <td>0.314115 ± 0.0621539</td>
+      <td>-</td>
+      <td>0.413835 ± 0.0803939</td>
+      <td><a href="plots/82cd827b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a228-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.01694 ± 3.18763</td>
+      <td>1.07319 ± 0.150502</td>
+      <td>1.43307 ± 0.42795</td>
+      <td>-</td>
+      <td>0.502044 ± 0.214893</td>
+      <td><a href="plots/82cd827c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a229-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.0119857 ± 0.00120279</td>
+      <td>0.0193787 ± 0.00558013</td>
+      <td>0.00983165 ± 0.00166642</td>
+      <td>-</td>
+      <td>0.0111353 ± 0.00218147</td>
+      <td><a href="plots/82cd827d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0326918 ± 0.00849123</td>
+      <td>0.0568533 ± 0.0253688</td>
+      <td>0.0247825 ± 0.00931342</td>
+      <td>-</td>
+      <td>0.0353614 ± 0.0130556</td>
+      <td><a href="plots/82cd827e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.750796 ± 0.150842</td>
+      <td>1.80125 ± 0.991021</td>
+      <td>0.469832 ± 0.131534</td>
+      <td>-</td>
+      <td>0.738234 ± 0.237468</td>
+      <td><a href="plots/82cd827f-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0668427 ± 0.0277279</td>
+      <td>0.108031 ± 0.0321998</td>
+      <td>0.062386 ± 0.0187895</td>
+      <td>-</td>
+      <td>0.062628 ± 0.0250314</td>
+      <td><a href="plots/82cd8280-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Horizontal</th>
+      <th>Debug depth</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
+      <td>0.105 ± 0.306569</td>
+      <td>-</td>
+      <td>0.105 ± 0.306569</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.395673 ± 0.0319699</td>
+      <td>0.230813 ± 0.0100106</td>
+      <td>0.267221 ± 0.0189206</td>
+      <td>-</td>
+      <td>0.873119 ± 0.00334688</td>
+      <td><a href="plots/840275ba-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.939385 ± 0.0144187</td>
+      <td>0.419118 ± 0.0343213</td>
+      <td>0.882087 ± 0.0159818</td>
+      <td>-</td>
+      <td>0.807764 ± 0.0135016</td>
+      <td><a href="plots/840275bb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8b15a22f-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.0606148 ± 0.0144187</td>
+      <td>0.580882 ± 0.0343213</td>
+      <td>0.117913 ± 0.0159818</td>
+      <td>-</td>
+      <td>0.192236 ± 0.0135016</td>
+      <td><a href="plots/840275bc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c549856-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>0.55708 ± 0.201401</td>
+      <td>1.00992 ± 0.0438135</td>
+      <td>0.885965 ± 0.240162</td>
+      <td>-</td>
+      <td>1.00045 ± 0.163554</td>
+      <td><a href="plots/840275bd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c549857-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00391766 ± 0.000301884</td>
+      <td>0.0144654 ± 0.00109003</td>
+      <td>0.00525404 ± 0.00032424</td>
+      <td>-</td>
+      <td>0.00715409 ± 0.00022092</td>
+      <td><a href="plots/840275be-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c549858-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0125674 ± 0.00128738</td>
+      <td>0.0698827 ± 0.00556345</td>
+      <td>0.0216369 ± 0.00147501</td>
+      <td>-</td>
+      <td>0.0319289 ± 0.00144984</td>
+      <td><a href="plots/840275bf-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c549859-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.0647833 ± 0.0167731</td>
+      <td>1.40481 ± 0.234189</td>
+      <td>0.134061 ± 0.0213189</td>
+      <td>-</td>
+      <td>0.238334 ± 0.0208651</td>
+      <td><a href="plots/851aec7a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c54985a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0449236 ± 0.00396175</td>
+      <td>0.115375 ± 0.00815995</td>
+      <td>0.0467678 ± 0.00290692</td>
+      <td>-</td>
+      <td>0.0654858 ± 0.00280807</td>
+      <td><a href="plots/851aec7b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+      <td><a href="plots/8c54985b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
   </tbody>
-</table></div><hr/><br/><p><b>Planar (Image Pair)</b></p><br/><div style="background-color:LightGoldenRodYellow;"><table border="1" class="dataframe">
+</table></div><hr/><br/><p><b>Planar (Image Pair) [No Noise]</b></p><br/><div style="background-color:LightGoldenRodYellow;"><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
       <th></th>
       <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
       <th>EPL Search (Patch Match SSD)</th>
       <th>Generalized Rectification</th>
       <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
+      <th>Boxplot</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th rowspan="11" valign="top">Move 6 DoF</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.524137</td>
-      <td>0.33734</td>
-      <td>0.714814</td>
-      <td>0.0277702</td>
-      <td>0.0310417</td>
+      <td>0.524137 ± 0.0</td>
+      <td>0.280967 ± 0.0</td>
+      <td>0.33734 ± 0.0</td>
+      <td>0.713307 ± 0.0</td>
+      <td>0.0277702 ± 0.0</td>
+      <td><a href="plots/8c54985c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.867658</td>
-      <td>0.7615</td>
-      <td>0.541544</td>
-      <td>0.336127</td>
-      <td>0.226821</td>
+      <td>0.867658 ± 0.0</td>
+      <td>0.4657 ± 0.0</td>
+      <td>0.7615 ± 0.0</td>
+      <td>0.588161 ± 0.0</td>
+      <td>0.336127 ± 0.0</td>
+      <td><a href="plots/8d8c9322-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.132342</td>
-      <td>0.2385</td>
-      <td>0.458456</td>
-      <td>0.663873</td>
-      <td>0.773179</td>
+      <td>0.132342 ± 0.0</td>
+      <td>0.5343 ± 0.0</td>
+      <td>0.2385 ± 0.0</td>
+      <td>0.411839 ± 0.0</td>
+      <td>0.663873 ± 0.0</td>
+      <td><a href="plots/8d8c9323-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.704095</td>
-      <td>1.40955</td>
-      <td>7.04307</td>
-      <td>3.00487</td>
-      <td>3.14089</td>
+      <td>0.704095 ± 0.0</td>
+      <td>1.06626 ± 0.0</td>
+      <td>1.40955 ± 0.0</td>
+      <td>6.23406 ± 0.0</td>
+      <td>3.00487 ± 0.0</td>
+      <td><a href="plots/8d8c9324-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.0054476</td>
-      <td>0.00740881</td>
-      <td>0.0123224</td>
-      <td>0.0211032</td>
-      <td>0.0403531</td>
+      <td>0.0054476 ± 0.0</td>
+      <td>0.0154271 ± 0.0</td>
+      <td>0.00740881 ± 0.0</td>
+      <td>0.0117209 ± 0.0</td>
+      <td>0.0211032 ± 0.0</td>
+      <td><a href="plots/8d8c9325-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0247979</td>
-      <td>0.0302648</td>
-      <td>0.0534373</td>
-      <td>0.0818886</td>
-      <td>0.166809</td>
+      <td>0.0247979 ± 0.0</td>
+      <td>0.0638844 ± 0.0</td>
+      <td>0.0302648 ± 0.0</td>
+      <td>0.0479617 ± 0.0</td>
+      <td>0.0818886 ± 0.0</td>
+      <td><a href="plots/8d8c9326-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.152527</td>
-      <td>0.313198</td>
-      <td>0.846573</td>
-      <td>1.97507</td>
-      <td>3.40877</td>
+      <td>0.152527 ± 0.0</td>
+      <td>1.1473 ± 0.0</td>
+      <td>0.313198 ± 0.0</td>
+      <td>0.700215 ± 0.0</td>
+      <td>1.97507 ± 0.0</td>
+      <td><a href="plots/8e9d15b6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0451621</td>
-      <td>0.0688546</td>
-      <td>0.125071</td>
-      <td>0.170397</td>
-      <td>0.379106</td>
+      <td>0.0451621 ± 0.0</td>
+      <td>0.125467 ± 0.0</td>
+      <td>0.0688546 ± 0.0</td>
+      <td>0.129949 ± 0.0</td>
+      <td>0.170397 ± 0.0</td>
+      <td><a href="plots/8e9d15b7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move Toward Ground</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.490443</td>
-      <td>0.339707</td>
-      <td>0.670742</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.490443 ± 0.0</td>
+      <td>0.231878 ± 0.0</td>
+      <td>0.339707 ± 0.0</td>
+      <td>0.682666 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15b8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.79597</td>
-      <td>0.727371</td>
-      <td>0.490486</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.79597 ± 0.0</td>
+      <td>0.451336 ± 0.0</td>
+      <td>0.727371 ± 0.0</td>
+      <td>0.423935 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15b9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.20403</td>
-      <td>0.272629</td>
-      <td>0.509514</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.20403 ± 0.0</td>
+      <td>0.548664 ± 0.0</td>
+      <td>0.272629 ± 0.0</td>
+      <td>0.576065 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15ba-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.502131</td>
-      <td>1.26733</td>
-      <td>5.83155</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.502131 ± 0.0</td>
+      <td>1.13315 ± 0.0</td>
+      <td>1.26733 ± 0.0</td>
+      <td>3.20817 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15bb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00660817</td>
-      <td>0.00816435</td>
-      <td>0.0148698</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.00660817 ± 0.0</td>
+      <td>0.0155966 ± 0.0</td>
+      <td>0.00816435 ± 0.0</td>
+      <td>0.0175524 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15bc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0293404</td>
-      <td>0.0337395</td>
-      <td>0.0614542</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0293404 ± 0.0</td>
+      <td>0.0728333 ± 0.0</td>
+      <td>0.0337395 ± 0.0</td>
+      <td>0.0742234 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8e9d15bd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.256329</td>
-      <td>0.374814</td>
-      <td>1.0388</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.256329 ± 0.0</td>
+      <td>1.21565 ± 0.0</td>
+      <td>0.374814 ± 0.0</td>
+      <td>1.35885 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8fd9f7aa-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0515069</td>
-      <td>0.0661101</td>
-      <td>0.128852</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0515069 ± 0.0</td>
+      <td>0.128716 ± 0.0</td>
+      <td>0.0661101 ± 0.0</td>
+      <td>0.147649 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/8fd9f7ab-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move x-axis</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.627936</td>
-      <td>0.389128</td>
-      <td>0.841387</td>
-      <td>0.583717</td>
-      <td>0.643525</td>
+      <td>0.627936 ± 0.0</td>
+      <td>0.509935 ± 0.0</td>
+      <td>0.389128 ± 0.0</td>
+      <td>0.895876 ± 0.0</td>
+      <td>0.583717 ± 0.0</td>
+      <td><a href="plots/8fd9f7ac-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.997771</td>
-      <td>0.948452</td>
-      <td>0.367623</td>
-      <td>0.762593</td>
-      <td>0.384747</td>
+      <td>0.997771 ± 0.0</td>
+      <td>0.597388 ± 0.0</td>
+      <td>0.948452 ± 0.0</td>
+      <td>0.769288 ± 0.0</td>
+      <td>0.762593 ± 0.0</td>
+      <td><a href="plots/8fd9f7ad-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.00222911</td>
-      <td>0.0515476</td>
-      <td>0.632377</td>
-      <td>0.237407</td>
-      <td>0.615253</td>
+      <td>0.00222911 ± 0.0</td>
+      <td>0.402612 ± 0.0</td>
+      <td>0.0515476 ± 0.0</td>
+      <td>0.230712 ± 0.0</td>
+      <td>0.237407 ± 0.0</td>
+      <td><a href="plots/8fd9f7ae-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.264528</td>
-      <td>1.09856</td>
-      <td>1.22516</td>
-      <td>1.28441</td>
-      <td>0.336455</td>
+      <td>0.264528 ± 0.0</td>
+      <td>1.09679 ± 0.0</td>
+      <td>1.09856 ± 0.0</td>
+      <td>1.41327 ± 0.0</td>
+      <td>1.28441 ± 0.0</td>
+      <td><a href="plots/8fd9f7af-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.0026063</td>
-      <td>0.00419629</td>
-      <td>0.00911386</td>
-      <td>0.00794671</td>
-      <td>0.00896975</td>
+      <td>0.0026063 ± 0.0</td>
+      <td>0.00970045 ± 0.0</td>
+      <td>0.00419629 ± 0.0</td>
+      <td>0.00796543 ± 0.0</td>
+      <td>0.00794671 ± 0.0</td>
+      <td><a href="plots/8fd9f7b0-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0142585</td>
-      <td>0.0210169</td>
-      <td>0.0570124</td>
-      <td>0.0472468</td>
-      <td>0.0554796</td>
+      <td>0.0142585 ± 0.0</td>
+      <td>0.0471785 ± 0.0</td>
+      <td>0.0210169 ± 0.0</td>
+      <td>0.0472211 ± 0.0</td>
+      <td>0.0472468 ± 0.0</td>
+      <td><a href="plots/8fd9f7b1-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.00223409</td>
-      <td>0.0543492</td>
-      <td>1.72018</td>
-      <td>0.311315</td>
-      <td>1.59911</td>
+      <td>0.00223409 ± 0.0</td>
+      <td>0.673954 ± 0.0</td>
+      <td>0.0543492 ± 0.0</td>
+      <td>0.299904 ± 0.0</td>
+      <td>0.311315 ± 0.0</td>
+      <td><a href="plots/911dedd8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0186269</td>
-      <td>0.032559</td>
-      <td>0.0594247</td>
-      <td>0.0543523</td>
-      <td>0.0556283</td>
+      <td>0.0186269 ± 0.0</td>
+      <td>0.0776195 ± 0.0</td>
+      <td>0.032559 ± 0.0</td>
+      <td>0.0539728 ± 0.0</td>
+      <td>0.0543523 ± 0.0</td>
+      <td><a href="plots/911dedd9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move y-axis</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
       <td>-</td>
       <td>-</td>
-      <td><a href="sfm_results/OpenCV Block Matching/Planar (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.593076</td>
-      <td>0.354642</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.593076 ± 0.0</td>
+      <td>0.474769 ± 0.0</td>
+      <td>0.354642 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911dedda-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.991042</td>
-      <td>0.946726</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.991042 ± 0.0</td>
+      <td>0.469163 ± 0.0</td>
+      <td>0.946726 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911deddb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.00895753</td>
-      <td>0.0532741</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.00895753 ± 0.0</td>
+      <td>0.530837 ± 0.0</td>
+      <td>0.0532741 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911deddc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>0.180945</td>
-      <td>0.801238</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.180945 ± 0.0</td>
+      <td>1.13943 ± 0.0</td>
+      <td>0.801238 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911deddd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00253659</td>
-      <td>0.00414153</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.00253659 ± 0.0</td>
+      <td>0.0126772 ± 0.0</td>
+      <td>0.00414153 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911dedde-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0120308</td>
-      <td>0.0202769</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0120308 ± 0.0</td>
+      <td>0.0631014 ± 0.0</td>
+      <td>0.0202769 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/911deddf-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.0090385</td>
-      <td>0.0562719</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0090385 ± 0.0</td>
+      <td>1.13145 ± 0.0</td>
+      <td>0.0562719 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/924db512-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.020158</td>
-      <td>0.0331544</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.020158 ± 0.0</td>
+      <td>0.0978659 ± 0.0</td>
+      <td>0.0331544 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/924db513-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
   </tbody>
-</table></div><hr/><br/><p><b>Structure3D (Image Pair)</b></p><br/><div style="background-color:PaleGoldenRod;"><table border="1" class="dataframe">
+</table></div><hr/><br/><p><b>Planar (Image Pair) [Pose and Image Noise]</b></p><br/><div style="background-color:PaleGoldenRod;"><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
       <th></th>
       <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
       <th>EPL Search (Patch Match SSD)</th>
       <th>Generalized Rectification</th>
       <th>JPLV (JPLV undistort, JPLV rectify)</th>
-      <th>OpenCV Block Matching</th>
+      <th>Boxplot</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th rowspan="11" valign="top">Move 6 DoF</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.4754</td>
-      <td>0.297943</td>
-      <td>0.70668</td>
-      <td>0.0239128</td>
-      <td>0.0306641</td>
+      <td>0.342379 ± 0.00847262</td>
+      <td>0.171567 ± 0.00154555</td>
+      <td>0.288274 ± 0.00197335</td>
+      <td>0.716227 ± 0.0251833</td>
+      <td>0.024055 ± 0.00366722</td>
+      <td><a href="plots/924db514-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.814924</td>
-      <td>0.787464</td>
-      <td>0.50995</td>
-      <td>0.318764</td>
-      <td>0.227209</td>
+      <td>0.646695 ± 0.069384</td>
+      <td>0.294626 ± 0.00792203</td>
+      <td>0.513167 ± 0.0191208</td>
+      <td>0.436475 ± 0.00893333</td>
+      <td>0.272045 ± 0.0161478</td>
+      <td><a href="plots/924db515-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.185076</td>
-      <td>0.212536</td>
-      <td>0.49005</td>
-      <td>0.681236</td>
-      <td>0.772791</td>
+      <td>0.353305 ± 0.069384</td>
+      <td>0.705374 ± 0.00792203</td>
+      <td>0.486833 ± 0.0191208</td>
+      <td>0.563525 ± 0.00893333</td>
+      <td>0.727955 ± 0.0161478</td>
+      <td><a href="plots/924db516-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>1.10402</td>
-      <td>2.34367</td>
-      <td>3.42342</td>
-      <td>1.55005</td>
-      <td>4.94027</td>
+      <td>0.833524 ± 0.110217</td>
+      <td>1.1596 ± 0.00199631</td>
+      <td>2.55408 ± 0.41102</td>
+      <td>5.26757 ± 1.01897</td>
+      <td>2.05809 ± 0.710937</td>
+      <td><a href="plots/924db517-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00755259</td>
-      <td>0.00742588</td>
-      <td>0.0149689</td>
-      <td>0.0232151</td>
-      <td>0.0391018</td>
+      <td>0.00962718 ± 0.00121221</td>
+      <td>0.027387 ± 0.000453589</td>
+      <td>0.0145677 ± 0.000589636</td>
+      <td>0.0180196 ± 0.000317507</td>
+      <td>0.0271403 ± 0.00148428</td>
+      <td><a href="plots/924db518-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0251222</td>
-      <td>0.0266306</td>
-      <td>0.0560355</td>
-      <td>0.085865</td>
-      <td>0.161151</td>
+      <td>0.0419497 ± 0.00695904</td>
+      <td>0.113817 ± 0.00308919</td>
+      <td>0.0553392 ± 0.00288818</td>
+      <td>0.0687206 ± 0.0016089</td>
+      <td>0.101488 ± 0.00614714</td>
+      <td><a href="plots/93694f24-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.227108</td>
-      <td>0.269899</td>
-      <td>0.960977</td>
-      <td>2.13712</td>
-      <td>3.40123</td>
+      <td>0.566201 ± 0.19187</td>
+      <td>2.39657 ± 0.0924585</td>
+      <td>0.951538 ± 0.0782502</td>
+      <td>1.29206 ± 0.0488999</td>
+      <td>2.68846 ± 0.217443</td>
+      <td><a href="plots/93694f25-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0829058</td>
-      <td>0.0767695</td>
-      <td>0.141541</td>
-      <td>0.180917</td>
-      <td>0.37529</td>
+      <td>0.0831775 ± 0.00818429</td>
+      <td>0.231079 ± 0.00269178</td>
+      <td>0.139659 ± 0.00530583</td>
+      <td>0.18493 ± 0.00438333</td>
+      <td>0.196863 ± 0.0118163</td>
+      <td><a href="plots/93694f26-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move Toward Ground</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
-      <td>-</td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
       <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.3 ± 0.46291</td>
+      <td>0.26 ± 0.443087</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.431006</td>
-      <td>0.292129</td>
-      <td>0.662301</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.317389 ± 0.00674236</td>
+      <td>0.130983 ± 0.00253133</td>
+      <td>0.297059 ± 0.00529342</td>
+      <td>0.685732 ± 0.0193694</td>
+      <td>0.154676 ± 0.00863796</td>
+      <td><a href="plots/93694f27-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.718976</td>
-      <td>0.751298</td>
-      <td>0.462074</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.604782 ± 0.014614</td>
+      <td>0.260244 ± 0.0394117</td>
+      <td>0.465713 ± 0.0111493</td>
+      <td>0.338555 ± 0.00334831</td>
+      <td>0.377205 ± 0.0196144</td>
+      <td><a href="plots/93694f28-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.281024</td>
-      <td>0.248702</td>
-      <td>0.537926</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.395218 ± 0.014614</td>
+      <td>0.739756 ± 0.0394117</td>
+      <td>0.534287 ± 0.0111493</td>
+      <td>0.661445 ± 0.00334831</td>
+      <td>0.622795 ± 0.0196144</td>
+      <td><a href="plots/93694f29-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>1.15088</td>
-      <td>2.32667</td>
-      <td>7.43053</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.835889 ± 0.0383809</td>
+      <td>1.09235 ± 0.0128107</td>
+      <td>2.28392 ± 0.512921</td>
+      <td>6.96364 ± 1.03599</td>
+      <td>1.41391 ± 0.222314</td>
+      <td><a href="plots/93694f2a-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00941539</td>
-      <td>0.008038</td>
-      <td>0.017893</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0105804 ± 0.000354084</td>
+      <td>0.0263622 ± 0.00273771</td>
+      <td>0.016504 ± 0.000517404</td>
+      <td>0.0252709 ± 0.000249373</td>
+      <td>0.0202923 ± 0.00111458</td>
+      <td><a href="plots/93694f2b-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0337268</td>
-      <td>0.0313136</td>
-      <td>0.0648466</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0462109 ± 0.00116102</td>
+      <td>0.140744 ± 0.015937</td>
+      <td>0.0642141 ± 0.00091314</td>
+      <td>0.0958914 ± 0.000800776</td>
+      <td>0.0873099 ± 0.00432158</td>
+      <td><a href="plots/94a0dcb8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.390867</td>
-      <td>0.331029</td>
-      <td>1.16416</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.654463 ± 0.0411277</td>
+      <td>2.93273 ± 0.611722</td>
+      <td>1.14849 ± 0.0530186</td>
+      <td>1.95401 ± 0.0291295</td>
+      <td>1.65864 ± 0.149511</td>
+      <td><a href="plots/94a0dcb9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0893801</td>
-      <td>0.0728958</td>
-      <td>0.179869</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0822636 ± 0.00165618</td>
+      <td>0.208937 ± 0.0171389</td>
+      <td>0.136295 ± 0.00206896</td>
+      <td>0.24062 ± 0.00533003</td>
+      <td>0.170212 ± 0.00773868</td>
+      <td><a href="plots/94a0dcba-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move x-axis</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.24 ± 0.431419</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.58472</td>
-      <td>0.256097</td>
-      <td>0.837057</td>
-      <td>0.70776</td>
-      <td>0.640225</td>
+      <td>0.497691 ± 0.0173444</td>
+      <td>0.234841 ± 0.00196453</td>
+      <td>0.304248 ± 0.0196554</td>
+      <td>0.890601 ± 0.002417</td>
+      <td>0.91918 ± 0.00200002</td>
+      <td><a href="plots/94a0dcbb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.964799</td>
-      <td>0.939102</td>
-      <td>0.352565</td>
-      <td>0.72351</td>
-      <td>0.364079</td>
+      <td>0.958801 ± 0.0112729</td>
+      <td>0.503679 ± 0.0117674</td>
+      <td>0.768495 ± 0.0209125</td>
+      <td>0.737765 ± 0.00670279</td>
+      <td>0.741954 ± 0.00901521</td>
+      <td><a href="plots/94a0dcbc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.0352009</td>
-      <td>0.0608976</td>
-      <td>0.647435</td>
-      <td>0.27649</td>
-      <td>0.635921</td>
+      <td>0.0411991 ± 0.0112729</td>
+      <td>0.496321 ± 0.0117674</td>
+      <td>0.231505 ± 0.0209125</td>
+      <td>0.262235 ± 0.00670279</td>
+      <td>0.258046 ± 0.00901521</td>
+      <td><a href="plots/94a0dcbd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>1.03657</td>
-      <td>2.11627</td>
-      <td>2.26725</td>
-      <td>1.41769</td>
-      <td>2.26725</td>
+      <td>0.201385 ± 0.0404223</td>
+      <td>1.07296 ± 0.0274606</td>
+      <td>1.2894 ± 0.267374</td>
+      <td>1.05768 ± 0.147362</td>
+      <td>1.37184 ± 0.297626</td>
+      <td><a href="plots/94a0dcbe-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00509033</td>
-      <td>0.00435969</td>
-      <td>0.0108617</td>
-      <td>0.00965607</td>
-      <td>0.0108989</td>
+      <td>0.00351601 ± 0.000201827</td>
+      <td>0.0159525 ± 0.000553636</td>
+      <td>0.00711808 ± 0.000377724</td>
+      <td>0.00773963 ± 0.000101522</td>
+      <td>0.00771131 ± 0.000127735</td>
+      <td><a href="plots/94a0dcbf-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0140271</td>
-      <td>0.0201988</td>
-      <td>0.0578619</td>
-      <td>0.0485731</td>
-      <td>0.0561378</td>
+      <td>0.0158481 ± 0.00103812</td>
+      <td>0.0576043 ± 0.00279754</td>
+      <td>0.0314079 ± 0.00164776</td>
+      <td>0.0363153 ± 0.000603774</td>
+      <td>0.0358908 ± 0.000642262</td>
+      <td><a href="plots/95e54d0c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.0364852</td>
-      <td>0.0648466</td>
-      <td>1.83636</td>
-      <td>0.38215</td>
-      <td>1.74666</td>
+      <td>0.0431106 ± 0.012254</td>
+      <td>0.986464 ± 0.0467905</td>
+      <td>0.3022 ± 0.0358454</td>
+      <td>0.355554 ± 0.0123199</td>
+      <td>0.347988 ± 0.0163847</td>
+      <td><a href="plots/95e54d0d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0969078</td>
-      <td>0.0384563</td>
-      <td>0.0844863</td>
-      <td>0.0847602</td>
-      <td>0.0817047</td>
+      <td>0.0299502 ± 0.00307062</td>
+      <td>0.138398 ± 0.0044502</td>
+      <td>0.0600628 ± 0.00340586</td>
+      <td>0.0664812 ± 0.00123383</td>
+      <td>0.0682141 ± 0.00165209</td>
+      <td><a href="plots/95e54d0e-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th rowspan="11" valign="top">Move y-axis</th>
       <th>Debug depth</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Planar (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.18 ± 0.388088</td>
+      <td>0.98 ± 0.141421</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.336136 ± 0.0171741</td>
+      <td>0.200075 ± 0.00455446</td>
+      <td>0.204621 ± 0.0374298</td>
+      <td>0.893587 ± 0.00215704</td>
+      <td>0.0248861 ± 0.0</td>
+      <td><a href="plots/95e54d0f-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.877343 ± 0.0234475</td>
+      <td>0.265166 ± 0.0308602</td>
+      <td>0.745553 ± 0.0283639</td>
+      <td>0.719244 ± 0.0087897</td>
+      <td>0.0 ± 0.0</td>
+      <td><a href="plots/95e54d10-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.122657 ± 0.0234475</td>
+      <td>0.734834 ± 0.0308602</td>
+      <td>0.254447 ± 0.0283639</td>
+      <td>0.280756 ± 0.0087897</td>
+      <td>1.0 ± 0.0</td>
+      <td><a href="plots/95e54d11-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>0.24995 ± 0.0456175</td>
+      <td>1.1156 ± 0.0122913</td>
+      <td>0.952374 ± 0.23821</td>
+      <td>1.27763 ± 0.268555</td>
+      <td>2.4817 ± 0.0</td>
+      <td><a href="plots/95e54d12-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00492855 ± 0.000410529</td>
+      <td>0.0291753 ± 0.00196252</td>
+      <td>0.00766226 ± 0.000635786</td>
+      <td>0.00801486 ± 0.000122722</td>
+      <td>0.239249 ± 0.0</td>
+      <td><a href="plots/95e54d13-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.021181 ± 0.00216305</td>
+      <td>0.142641 ± 0.0109781</td>
+      <td>0.0324338 ± 0.00224991</td>
+      <td>0.0377596 ± 0.000644449</td>
+      <td>1.70809 ± 0.0</td>
+      <td><a href="plots/9714a7e0-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.140607 ± 0.0306489</td>
+      <td>2.82339 ± 0.460279</td>
+      <td>0.343264 ± 0.0530881</td>
+      <td>0.390551 ± 0.01697</td>
+      <td>inf ± 0.0</td>
+      <td><a href="plots/9714a7e1-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0410064 ± 0.00319629</td>
+      <td>0.232768 ± 0.0129107</td>
+      <td>0.0672649 ± 0.00686721</td>
+      <td>0.0699583 ± 0.00152605</td>
+      <td>1.74668 ± 0.0</td>
+      <td><a href="plots/9714a7e2-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+  </tbody>
+</table></div><hr/><br/><p><b>Structure3D (Image Pair) [No Noise]</b></p><br/><div style="background-color:PeachPuff;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
+      <th>EPL Search (Patch Match SSD)</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>Boxplot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">Move 6 DoF</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [No Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.4754 ± 0.0</td>
+      <td>0.293271 ± 0.0</td>
+      <td>0.297943 ± 0.0</td>
+      <td>0.660785 ± 0.0</td>
+      <td>0.0239128 ± 0.0</td>
+      <td><a href="plots/9714a7e3-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.814924 ± 0.0</td>
+      <td>0.431543 ± 0.0</td>
+      <td>0.787464 ± 0.0</td>
+      <td>0.553188 ± 0.0</td>
+      <td>0.318764 ± 0.0</td>
+      <td><a href="plots/9714a7e4-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.185076 ± 0.0</td>
+      <td>0.568457 ± 0.0</td>
+      <td>0.212536 ± 0.0</td>
+      <td>0.446812 ± 0.0</td>
+      <td>0.681236 ± 0.0</td>
+      <td><a href="plots/9714a7e5-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.10402 ± 0.0</td>
+      <td>1.44105 ± 0.0</td>
+      <td>2.34367 ± 0.0</td>
+      <td>2.1846 ± 0.0</td>
+      <td>1.55005 ± 0.0</td>
+      <td><a href="plots/9714a7e6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00755259 ± 0.0</td>
+      <td>0.0162191 ± 0.0</td>
+      <td>0.00742588 ± 0.0</td>
+      <td>0.0138071 ± 0.0</td>
+      <td>0.0232151 ± 0.0</td>
+      <td><a href="plots/983252f8-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0251222 ± 0.0</td>
+      <td>0.0676224 ± 0.0</td>
+      <td>0.0266306 ± 0.0</td>
+      <td>0.050878 ± 0.0</td>
+      <td>0.085865 ± 0.0</td>
+      <td><a href="plots/983252f9-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.227108 ± 0.0</td>
+      <td>1.31727 ± 0.0</td>
+      <td>0.269899 ± 0.0</td>
+      <td>0.807704 ± 0.0</td>
+      <td>2.13712 ± 0.0</td>
+      <td><a href="plots/983252fa-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0829058 ± 0.0</td>
+      <td>0.130125 ± 0.0</td>
+      <td>0.0767695 ± 0.0</td>
+      <td>0.136031 ± 0.0</td>
+      <td>0.180917 ± 0.0</td>
+      <td><a href="plots/983252fb-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move Toward Ground</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [No Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.431006 ± 0.0</td>
+      <td>0.241117 ± 0.0</td>
+      <td>0.292129 ± 0.0</td>
+      <td>0.626787 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/983252fc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.718976 ± 0.0</td>
+      <td>0.415763 ± 0.0</td>
+      <td>0.751298 ± 0.0</td>
+      <td>0.412341 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/983252fd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.281024 ± 0.0</td>
+      <td>0.584237 ± 0.0</td>
+      <td>0.248702 ± 0.0</td>
+      <td>0.587659 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/983252fe-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.15088 ± 0.0</td>
+      <td>1.40984 ± 0.0</td>
+      <td>2.32667 ± 0.0</td>
+      <td>7.80761 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/995406fe-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00941539 ± 0.0</td>
+      <td>0.0163451 ± 0.0</td>
+      <td>0.008038 ± 0.0</td>
+      <td>0.0193877 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/995406ff-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0337268 ± 0.0</td>
+      <td>0.0770976 ± 0.0</td>
+      <td>0.0313136 ± 0.0</td>
+      <td>0.0762623 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/99540700-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.390867 ± 0.0</td>
+      <td>1.40521 ± 0.0</td>
+      <td>0.331029 ± 0.0</td>
+      <td>1.42518 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/99540701-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0893801 ± 0.0</td>
+      <td>0.13132 ± 0.0</td>
+      <td>0.0728958 ± 0.0</td>
+      <td>0.179277 ± 0.0</td>
+      <td>-</td>
+      <td><a href="plots/99540702-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move x-axis</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [No Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [No Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.58472 ± 0.0</td>
+      <td>0.409421 ± 0.0</td>
+      <td>0.256097 ± 0.0</td>
+      <td>0.856159 ± 0.0</td>
+      <td>0.70776 ± 0.0</td>
+      <td><a href="plots/99540703-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.964799 ± 0.0</td>
+      <td>0.503713 ± 0.0</td>
+      <td>0.939102 ± 0.0</td>
+      <td>0.727336 ± 0.0</td>
+      <td>0.72351 ± 0.0</td>
+      <td><a href="plots/99540704-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.0352009 ± 0.0</td>
+      <td>0.496287 ± 0.0</td>
+      <td>0.0608976 ± 0.0</td>
+      <td>0.272664 ± 0.0</td>
+      <td>0.27649 ± 0.0</td>
+      <td><a href="plots/99540705-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.03657 ± 0.0</td>
+      <td>2.022 ± 0.0</td>
+      <td>2.11627 ± 0.0</td>
+      <td>1.36818 ± 0.0</td>
+      <td>1.41769 ± 0.0</td>
+      <td><a href="plots/9a87db90-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00509033 ± 0.0</td>
+      <td>0.0118484 ± 0.0</td>
+      <td>0.00435969 ± 0.0</td>
+      <td>0.00966005 ± 0.0</td>
+      <td>0.00965607 ± 0.0</td>
+      <td><a href="plots/9a87db91-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0140271 ± 0.0</td>
+      <td>0.0584378 ± 0.0</td>
+      <td>0.0201988 ± 0.0</td>
+      <td>0.0483737 ± 0.0</td>
+      <td>0.0485731 ± 0.0</td>
+      <td><a href="plots/9a87db92-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.0364852 ± 0.0</td>
+      <td>0.985257 ± 0.0</td>
+      <td>0.0648466 ± 0.0</td>
+      <td>0.374881 ± 0.0</td>
+      <td>0.38215 ± 0.0</td>
+      <td><a href="plots/9a87db93-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0969078 ± 0.0</td>
+      <td>0.0931823 ± 0.0</td>
+      <td>0.0384563 ± 0.0</td>
+      <td>0.0829418 ± 0.0</td>
+      <td>0.0847602 ± 0.0</td>
+      <td><a href="plots/9a87db94-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move y-axis</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
     </tr>
     <tr>
       <th>Debug stereo</th>
-      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
-      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [No Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
       <td>-</td>
       <td>-</td>
-      <td><a href="sfm_results/OpenCV Block Matching/Structure3D (Image Pair)/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Failure</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>1.0 ± 0.0</td>
+      <td>-</td>
     </tr>
     <tr>
       <th>Fraction estimated px</th>
-      <td>0.570452</td>
-      <td>0.217344</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.570452 ± 0.0</td>
+      <td>0.349531 ± 0.0</td>
+      <td>0.217344 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9a87db95-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction inliers (error <= 1%)</th>
-      <td>0.966424</td>
-      <td>0.938668</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.966424 ± 0.0</td>
+      <td>0.427898 ± 0.0</td>
+      <td>0.938668 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9a87db96-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Fraction outliers (error > 1%)</th>
-      <td>0.0335762</td>
-      <td>0.0613318</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0335762 ± 0.0</td>
+      <td>0.572102 ± 0.0</td>
+      <td>0.0613318 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9a87db97-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Max abs. error [m]</th>
-      <td>1.25674</td>
-      <td>1.29753</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>1.25674 ± 0.0</td>
+      <td>2.3173 ± 0.0</td>
+      <td>1.29753 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9bc91302-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Mean G.T. relative error</th>
-      <td>0.00483209</td>
-      <td>0.00420229</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.00483209 ± 0.0</td>
+      <td>0.013605 ± 0.0</td>
+      <td>0.00420229 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9bc91303-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Median abs. error [m]</th>
-      <td>0.0125014</td>
-      <td>0.0186144</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0125014 ± 0.0</td>
+      <td>0.0669441 ± 0.0</td>
+      <td>0.0186144 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9bc91304-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>Outliers / inliers</th>
-      <td>0.0347428</td>
-      <td>0.0653391</td>
-      <td>-1</td>
-      <td>-1</td>
-      <td>-1</td>
+      <td>0.0347428 ± 0.0</td>
+      <td>1.337 ± 0.0</td>
+      <td>0.0653391 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9bc91305-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
     <tr>
       <th>RMSE [m]</th>
-      <td>0.0986529</td>
-      <td>0.0397873</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.0986529 ± 0.0</td>
+      <td>0.105588 ± 0.0</td>
+      <td>0.0397873 ± 0.0</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="plots/9bc91306-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+  </tbody>
+</table></div><hr/><br/><p><b>Structure3D (Image Pair) [Pose and Image Noise]</b></p><br/><div style="background-color:Snow;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>Dense KLT Optical Flow</th>
+      <th>EPL Search (Linear SSD)</th>
+      <th>EPL Search (Patch Match SSD)</th>
+      <th>Generalized Rectification</th>
+      <th>JPLV (JPLV undistort, JPLV rectify)</th>
+      <th>Boxplot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">Move 6 DoF</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move 6 DoF/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.302857 ± 0.0084597</td>
+      <td>0.18247 ± 0.00178392</td>
+      <td>0.254091 ± 0.00187985</td>
+      <td>0.661499 ± 0.0190723</td>
+      <td>0.0245658 ± 0.00363658</td>
+      <td><a href="plots/9bc91307-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.627 ± 0.0361605</td>
+      <td>0.277331 ± 0.00548759</td>
+      <td>0.514907 ± 0.0147358</td>
+      <td>0.431417 ± 0.0100611</td>
+      <td>0.30284 ± 0.0125581</td>
+      <td><a href="plots/9bc91308-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.373 ± 0.0361605</td>
+      <td>0.722669 ± 0.00548759</td>
+      <td>0.485093 ± 0.0147358</td>
+      <td>0.568583 ± 0.0100611</td>
+      <td>0.69716 ± 0.0125581</td>
+      <td><a href="plots/9bc91309-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.26093 ± 0.160144</td>
+      <td>1.86486 ± 0.335337</td>
+      <td>2.99106 ± 1.16278</td>
+      <td>3.51295 ± 0.858779</td>
+      <td>2.04766 ± 0.540904</td>
+      <td><a href="plots/9d0bdbd2-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.0117289 ± 0.000701073</td>
+      <td>0.0293465 ± 0.000240306</td>
+      <td>0.0153598 ± 0.000529679</td>
+      <td>0.0190743 ± 0.000393833</td>
+      <td>0.0253383 ± 0.00125313</td>
+      <td><a href="plots/9d0bdbd3-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0412365 ± 0.0039934</td>
+      <td>0.112688 ± 0.00161561</td>
+      <td>0.0539792 ± 0.00214921</td>
+      <td>0.0688039 ± 0.00182805</td>
+      <td>0.0894398 ± 0.00364194</td>
+      <td><a href="plots/9d0bdbd4-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.600369 ± 0.0970181</td>
+      <td>2.6072 ± 0.0722196</td>
+      <td>0.943723 ± 0.057939</td>
+      <td>1.3192 ± 0.0549632</td>
+      <td>2.30769 ± 0.138406</td>
+      <td><a href="plots/9d0bdbd5-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.116153 ± 0.00379932</td>
+      <td>0.251766 ± 0.00179919</td>
+      <td>0.146424 ± 0.00462735</td>
+      <td>0.184075 ± 0.00409112</td>
+      <td>0.196416 ± 0.0140394</td>
+      <td><a href="plots/9d0bdbd6-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move Toward Ground</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move Toward Ground/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.16 ± 0.370328</td>
+      <td>0.32 ± 0.471212</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.28921 ± 0.00900778</td>
+      <td>0.139467 ± 0.00182325</td>
+      <td>0.264674 ± 0.00634461</td>
+      <td>0.626592 ± 0.0180611</td>
+      <td>0.112272 ± 0.00945618</td>
+      <td><a href="plots/9d0bdbd7-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.571328 ± 0.0216755</td>
+      <td>0.257737 ± 0.0373892</td>
+      <td>0.476492 ± 0.0139895</td>
+      <td>0.331892 ± 0.00374479</td>
+      <td>0.375003 ± 0.0157665</td>
+      <td><a href="plots/9e2453dc-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.428672 ± 0.0216755</td>
+      <td>0.742263 ± 0.0373892</td>
+      <td>0.523508 ± 0.0139895</td>
+      <td>0.668108 ± 0.00374479</td>
+      <td>0.624997 ± 0.0157665</td>
+      <td><a href="plots/9e2453dd-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.25529 ± 0.081397</td>
+      <td>1.07779 ± 0.0324144</td>
+      <td>2.90991 ± 0.535701</td>
+      <td>6.3961 ± 0.99995</td>
+      <td>1.49642 ± 0.196635</td>
+      <td><a href="plots/9e2453de-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.0120068 ± 0.000604998</td>
+      <td>0.0249659 ± 0.00244073</td>
+      <td>0.016464 ± 0.000535239</td>
+      <td>0.0261313 ± 0.00027668</td>
+      <td>0.0216211 ± 0.000631909</td>
+      <td><a href="plots/9e2453df-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.049286 ± 0.00199839</td>
+      <td>0.123575 ± 0.0131313</td>
+      <td>0.0621418 ± 0.00141179</td>
+      <td>0.0970456 ± 0.00105326</td>
+      <td>0.0860502 ± 0.0034659</td>
+      <td><a href="plots/9e2453e0-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.752873 ± 0.0690445</td>
+      <td>2.96365 ± 0.597072</td>
+      <td>1.10052 ± 0.0643644</td>
+      <td>2.0134 ± 0.0339626</td>
+      <td>1.67125 ± 0.112869</td>
+      <td><a href="plots/9e2453e1-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.0964213 ± 0.00325554</td>
+      <td>0.197654 ± 0.0162751</td>
+      <td>0.137226 ± 0.00209504</td>
+      <td>0.236807 ± 0.00443845</td>
+      <td>0.188855 ± 0.0128094</td>
+      <td><a href="plots/9f502682-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move x-axis</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move x-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.34 ± 0.478518</td>
+      <td>0.0 ± 0.0</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.466109 ± 0.0199072</td>
+      <td>0.22245 ± 0.00118421</td>
+      <td>0.316638 ± 0.0131144</td>
+      <td>0.841109 ± 0.00306391</td>
+      <td>0.867068 ± 0.00255711</td>
+      <td><a href="plots/9f502683-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.931811 ± 0.00772395</td>
+      <td>0.351386 ± 0.00822509</td>
+      <td>0.778203 ± 0.01635</td>
+      <td>0.724393 ± 0.00782464</td>
+      <td>0.730547 ± 0.0104665</td>
+      <td><a href="plots/9f502684-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.0681887 ± 0.00772395</td>
+      <td>0.648614 ± 0.00822509</td>
+      <td>0.221797 ± 0.01635</td>
+      <td>0.275607 ± 0.00782464</td>
+      <td>0.269453 ± 0.0104665</td>
+      <td><a href="plots/9f502685-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.2859 ± 0.647748</td>
+      <td>1.21855 ± 0.149618</td>
+      <td>1.19587 ± 0.143689</td>
+      <td>1.39959 ± 0.0981973</td>
+      <td>1.44216 ± 0.0911402</td>
+      <td><a href="plots/9f502686-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.004643 ± 0.000281197</td>
+      <td>0.018234 ± 0.000394563</td>
+      <td>0.0073031 ± 0.00025836</td>
+      <td>0.00924466 ± 0.000176288</td>
+      <td>0.00918045 ± 0.000164059</td>
+      <td><a href="plots/9f502687-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.014536 ± 0.00103401</td>
+      <td>0.0886996 ± 0.00170483</td>
+      <td>0.029875 ± 0.00131601</td>
+      <td>0.0365497 ± 0.000640824</td>
+      <td>0.0361589 ± 0.000738149</td>
+      <td><a href="plots/9f502688-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.073251 ± 0.00891807</td>
+      <td>1.8474 ± 0.0666136</td>
+      <td>0.28557 ± 0.0271431</td>
+      <td>0.380624 ± 0.0150714</td>
+      <td>0.369112 ± 0.0195727</td>
+      <td><a href="plots/9f502689-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.06222 ± 0.00451275</td>
+      <td>0.145638 ± 0.00311273</td>
+      <td>0.0659206 ± 0.00150461</td>
+      <td>0.0954961 ± 0.00319646</td>
+      <td>0.0962761 ± 0.0022307</td>
+      <td><a href="plots/a0a144ee-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th rowspan="11" valign="top">Move y-axis</th>
+      <th>Debug depth</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/depth/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Debug stereo</th>
+      <td><a href="sfm_results/Dense KLT Optical Flow/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Linear SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/EPL Search (Patch Match SSD)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/Generalized Rectification/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td><a href="sfm_results/JPLV (JPLV undistort, JPLV rectify)/Structure3D (Image Pair) [Pose and Image Noise]/Move y-axis/debug/1.png" target="_blank">Image</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Failure</th>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.0 ± 0.0</td>
+      <td>0.24 ± 0.431419</td>
+      <td>0.96 ± 0.197949</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Fraction estimated px</th>
+      <td>0.419884 ± 0.0218784</td>
+      <td>0.198294 ± 0.00212863</td>
+      <td>0.271635 ± 0.0225058</td>
+      <td>0.8395 ± 0.0020546</td>
+      <td>0.0290088 ± 0.0206677</td>
+      <td><a href="plots/a0a144ef-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction inliers (error <= 1%)</th>
+      <td>0.905094 ± 0.0134356</td>
+      <td>0.25779 ± 0.0193674</td>
+      <td>0.769086 ± 0.0128146</td>
+      <td>0.688623 ± 0.00606939</td>
+      <td>0.0 ± 0.0</td>
+      <td><a href="plots/a0a144f0-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Fraction outliers (error > 1%)</th>
+      <td>0.094906 ± 0.0134356</td>
+      <td>0.74221 ± 0.0193674</td>
+      <td>0.230914 ± 0.0128146</td>
+      <td>0.311377 ± 0.00606939</td>
+      <td>1.0 ± 0.0</td>
+      <td><a href="plots/a0a144f1-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Max abs. error [m]</th>
+      <td>1.07717 ± 0.070892</td>
+      <td>1.20211 ± 0.113114</td>
+      <td>1.38781 ± 0.217599</td>
+      <td>1.6201 ± 0.183855</td>
+      <td>2.2629 ± 0.193049</td>
+      <td><a href="plots/a0a144f2-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Mean G.T. relative error</th>
+      <td>0.00584459 ± 0.000572709</td>
+      <td>0.0214569 ± 0.00106907</td>
+      <td>0.00759676 ± 0.000295447</td>
+      <td>0.00989528 ± 0.000242467</td>
+      <td>0.196484 ± 0.0249674</td>
+      <td><a href="plots/a0a144f3-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Median abs. error [m]</th>
+      <td>0.0152031 ± 0.00139937</td>
+      <td>0.101604 ± 0.00525243</td>
+      <td>0.0306148 ± 0.000898219</td>
+      <td>0.0394941 ± 0.00053356</td>
+      <td>1.26321 ± 0.127557</td>
+      <td><a href="plots/a0a144f4-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>Outliers / inliers</th>
+      <td>0.105097 ± 0.016439</td>
+      <td>2.90026 ± 0.287313</td>
+      <td>0.300602 ± 0.0218553</td>
+      <td>0.452284 ± 0.012879</td>
+      <td>inf ± nan</td>
+      <td><a href="plots/a1bb354c-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
+    </tr>
+    <tr>
+      <th>RMSE [m]</th>
+      <td>0.084702 ± 0.0106468</td>
+      <td>0.165621 ± 0.00787471</td>
+      <td>0.071479 ± 0.00316259</td>
+      <td>0.100807 ± 0.00591827</td>
+      <td>1.39762 ± 0.200134</td>
+      <td><a href="plots/a1bb354d-cf82-11eb-ae93-6bdf27564ce9.pdf" target="_blank">Image</a></td>
     </tr>
   </tbody>
 </table></div></body></html>
