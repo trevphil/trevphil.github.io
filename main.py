@@ -114,6 +114,10 @@ for test_dir in test_dirs:
 
   motions.add(motion)
   test_set_names.add(test_set_name)
+  if 'JPLV' in stereo_method:
+    stereo_method = 'JPLV Stereo (Normal Rect.)'
+  elif 'General' in stereo_method:
+    stereo_method = 'JPLV Stereo (General Rect.)'
   stereo_methods.add(stereo_method)
 
 stereo_methods = list(sorted(stereo_methods))
@@ -224,6 +228,10 @@ for test_dir in tqdm(test_dirs):
   motion = test_dir.parts[-1]
   test_set_name = test_dir.parts[-2]
   stereo_method = test_dir.parts[-3]
+  if 'JPLV' in stereo_method:
+    stereo_method = 'JPLV Stereo (Normal Rect.)'
+  elif 'General' in stereo_method:
+    stereo_method = 'JPLV Stereo (General Rect.)'
 
   if test_set_name == 'AirSim Rocks':
     test_set_name = 'AirSim Rocks [No Noise]'
