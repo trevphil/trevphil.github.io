@@ -18,6 +18,18 @@ plt.rcParams.update({
 })
 plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
+def rename_stereo_method(stereo_method):
+  if 'JPLV' in stereo_method:
+    stereo_method = 'JPLV Stereo (Normal Rect.)'
+  elif 'General' in stereo_method:
+    stereo_method = 'JPLV Stereo (General Rect.)'
+  return stereo_method
+
+def rename_test_set(test_set_name):
+  if test_set_name == 'AirSim Rocks':
+    test_set_name = 'AirSim Rocks [No Noise]'
+  return test_set_name
+
 #################################################################
 #################################################################
 #################################################################
@@ -109,15 +121,11 @@ motions = set()
 
 for test_dir in test_dirs:
   motion = test_dir.parts[-1]
-  test_set_name = test_dir.parts[-2]
-  stereo_method = test_dir.parts[-3]
+  test_set_name = rename_test_set(test_dir.parts[-2])
+  stereo_method = rename_stereo_method(test_dir.parts[-3])
 
   motions.add(motion)
   test_set_names.add(test_set_name)
-  if 'JPLV' in stereo_method:
-    stereo_method = 'JPLV Stereo (Normal Rect.)'
-  elif 'General' in stereo_method:
-    stereo_method = 'JPLV Stereo (General Rect.)'
   stereo_methods.add(stereo_method)
 
 stereo_methods = list(sorted(stereo_methods))
@@ -181,6 +189,9 @@ def generate_boxplot(data, metric, title=None):
   fig, ax = plt.subplots(1, 1, figsize=(10, 5))
   x, labels, clrs = [], [], []
   for method, statistics in data.items():
+    n = statistics[metric]["n"]
+    if np.isnan(n) or n == 0:
+      continue
     quartiles = [
       statistics[metric]['q00'],
       statistics[metric]['q25'],
@@ -189,7 +200,7 @@ def generate_boxplot(data, metric, title=None):
       statistics[metric]['q100']
     ]
     x.append(quartiles)
-    label = f'{method}\n[N={statistics[metric]["n"]}]'
+    label = f'{method}\n[N={n}]'
     labels.append(label.replace(' (', '\n('))
     clrs.append(method2color[method])
   bplot = ax.boxplot(x, labels=labels, whis=[0, 100], patch_artist=True)
@@ -226,15 +237,8 @@ for test_dir in tqdm(test_dirs):
   stats = parse_summary_file(test_dir / 'stats' / 'summary.txt')
 
   motion = test_dir.parts[-1]
-  test_set_name = test_dir.parts[-2]
-  stereo_method = test_dir.parts[-3]
-  if 'JPLV' in stereo_method:
-    stereo_method = 'JPLV Stereo (Normal Rect.)'
-  elif 'General' in stereo_method:
-    stereo_method = 'JPLV Stereo (General Rect.)'
-
-  if test_set_name == 'AirSim Rocks':
-    test_set_name = 'AirSim Rocks [No Noise]'
+  test_set_name = rename_test_set(test_dir.parts[-2])
+  stereo_method = rename_stereo_method(test_dir.parts[-3])
 
   df = test_sets[test_set_name]
 
