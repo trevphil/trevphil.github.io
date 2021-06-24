@@ -152,7 +152,23 @@ def make_dataframe():
 #################################################################
 #################################################################
 
-def parse_timeseries_file(filename):
+def remove_outliers(x, y):
+  idx = np.argsort(x)
+  x = x[idx]
+  y = y[idx]
+  q1 = np.quantile(y, 0.25)
+  q3 = np.quantile(y, 0.75)
+  iqr = q3 - q1
+  ymin = q1 - 1.5 * iqr
+  ymax = q3 + 1.5 * iqr
+  idx = (y >= ymin) & (y <= ymax)
+  x = x[idx]
+  y = y[idx]
+  return x, y
+  # poly = np.polynomial.polynomial.Polynomial.fit(x, y, 1)
+  # return x, poly(x)
+
+def parse_csv_file(filename):
   if not filename.exists():
     return None
   return pd.read_csv(filename, skipinitialspace=True)
@@ -163,25 +179,27 @@ def latex_sanitize(s):
 colors = [plt.get_cmap('Set2')(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
 
-def generate_timeseries_plot(data, column, title=None):
-  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+def generate_scatter_plot(data, x_name, y_name, title=None):
+  fig, ax = plt.subplots(1, 1, figsize=(10, 5), dpi=200)
   for method, (mean, std) in data.items():
-    x = mean['Frame ID']
-    y_center = mean[column]
+    x = mean[x_name]
+    y_center = mean[y_name]
+    x, y_center = remove_outliers(x, y_center)
     c = method2color[method]
-    ax.plot(x, y_center, label=method, linewidth=1.0, c=c)
+    # ax.plot(x, y_center, label=method, linewidth=1.0, c=c)
+    ax.scatter(x, y_center, label=method, linewidth=1.0, color=c, s=4.0)
     if False: # np.sum(std[column]) > 1e-5:
       y_upper = y_center + (3 * std[column])
       y_lower = y_center - (3 * std[column])
       ax.plot(x, y_lower, linewidth=0.6, linestyle='dashed', c=c)
       ax.plot(x, y_upper, linewidth=0.6, linestyle='dashed', c=c)
   ax.legend()
-  ax.set_xlabel('Image sequence number')
-  ax.set_ylabel(latex_sanitize(column))
+  ax.set_xlabel(latex_sanitize(x_name))
+  ax.set_ylabel(latex_sanitize(y_name))
   if title is not None:
     ax.set_title(title)
-  filename = './plots/%s.pdf' % str(uuid.uuid1())
-  plt.savefig(filename)
+  filename = './plots/%s.png' % str(uuid.uuid1())
+  plt.savefig(filename, dpi='figure')
   plt.close(fig=fig)
   return Path(filename)
 
@@ -189,7 +207,7 @@ def generate_boxplot(data, metric, title=None):
   fig, ax = plt.subplots(1, 1, figsize=(10, 5))
   x, labels, clrs = [], [], []
   for method, statistics in data.items():
-    n = statistics[metric]["n"]
+    n = statistics[metric]['n']
     if np.isnan(n) or n == 0:
       continue
     quartiles = [
@@ -220,11 +238,27 @@ def generate_boxplot(data, metric, title=None):
 #################################################################
 #################################################################
 
+def is_dependent_var(s):
+  s = s.lower()
+  keywords = ( 'fraction estimated', 'rmse', 'error', 'fraction inliers' )
+  for kw in keywords:
+    if kw in s:
+      return True
+  return False
+
+def is_independent_var(s):
+  s = s.lower()
+  keywords = ( 'xyz', 'camera angle', 'elevation' )
+  for kw in keywords:
+    if kw in s:
+      return True
+  return False
+
 test_sets = defaultdict(lambda: make_dataframe())  # Test set name --> table of results (dataframe)
-timeseries = defaultdict(lambda: dict())  # (test set, motion) --> dict from (method name --> timeseries)
+csvs = defaultdict(lambda: dict())  # (test set, motion) --> dict from (method name --> csvs)
 all_statistics = defaultdict(lambda: dict())  # (test_set, motion) --> dict from (method name --> statistics)
-timeseries_cols = None
-blacklisted_cols = ('Frame ID', 'Failure', 'Status')
+dependent_vars = []
+independent_vars = []
 
 for test_dir in tqdm(test_dirs):
   debug_image_files = get_files(test_dir / 'debug')
@@ -250,30 +284,29 @@ for test_dir in tqdm(test_dirs):
   if len(depth_image_files) == 1:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
-  ts_mean = parse_timeseries_file(test_dir / 'stats' / 'timeseries_mean.csv')
-  ts_std = parse_timeseries_file(test_dir / 'stats' / 'timeseries_std.csv')
-  if (ts_mean is not None) and (ts_std is not None) and \
-      (len(ts_mean) > 1) and (len(ts_mean) == len(ts_std)):
-    timeseries[(test_set_name, motion)][stereo_method] = (ts_mean, ts_std)
-    ts_cols = set([c for c in ts_mean.columns if c not in blacklisted_cols])
-    if timeseries_cols is None:
-      timeseries_cols = ts_cols
-    else:
-      timeseries_cols = timeseries_cols.intersection(ts_cols)
+  csv_mean = parse_csv_file(test_dir / 'stats' / 'individual_results_mean.csv')
+  csv_std = parse_csv_file(test_dir / 'stats' / 'individual_results_std.csv')
+  if (csv_mean is not None) and (csv_std is not None) and \
+      (len(csv_mean) > 1) and (len(csv_mean) == len(csv_std)):
+    csvs[(test_set_name, motion)][stereo_method] = (csv_mean, csv_std)
+    dependent_vars = set([c for c in csv_mean.columns if is_dependent_var(c)])
+    independent_vars = set([c for c in csv_mean.columns if is_independent_var(c)])
   
   all_statistics[(test_set_name, motion)][stereo_method] = stats
 
 # Generate timeseries plots and add to summary tables
-print('Generating timeseries plots...')
-timeseries_cols = list([s.strip() for s in sorted(timeseries_cols)])
-for (test_set_name, motion), method2timeseries in timeseries.items():
+print('Generating scatter plots...')
+dependent_vars = list([s.strip() for s in sorted(dependent_vars)])
+independent_vars = list([s.strip() for s in sorted(independent_vars)])
+for (test_set_name, motion), method2data in csvs.items():
   title = '%s: %s' % (test_set_name, motion)
   df = test_sets[test_set_name]
-  if 'Timeseries' not in df.columns:
-    df['Timeseries'] = '-'
-  for col in timeseries_cols:
-    image_path = generate_timeseries_plot(method2timeseries, col, title=title)
-    df['Timeseries'][motion][col] = image_path_to_link(image_path)
+  for indep_var in independent_vars:
+    if indep_var not in df.columns:
+      df[indep_var] = '-'
+    for dep_var in dependent_vars:
+      image_path = generate_scatter_plot(method2data, indep_var, dep_var, title=title)
+      df[indep_var][motion][dep_var] = image_path_to_link(image_path)
   test_sets[test_set_name] = df
 
 # Generate box-whisker plots and add to summary tables
@@ -283,7 +316,7 @@ for (test_set_name, motion), stats_per_method in all_statistics.items():
   df = test_sets[test_set_name]
   if 'Boxplot' not in df.columns:
     df['Boxplot'] = '-'
-  for col in timeseries_cols:
+  for col in independent_vars + dependent_vars + ['Runtime [ms]']:
     image_path = generate_boxplot(stats_per_method, col, title=title)
     df['Boxplot'][motion][col] = image_path_to_link(image_path)
   test_sets[test_set_name] = df
