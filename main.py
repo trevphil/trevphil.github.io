@@ -179,34 +179,49 @@ def latex_sanitize(s):
 colors = [plt.get_cmap('Set2')(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
 
-def generate_scatter_plot(data, x_name, y_name, title=None):
-  fig, ax = plt.subplots(1, 1, figsize=(10, 5), dpi=200)
-  for method, (mean, std) in data.items():
+def generate_plot(data, x_name, y_name, title=None):
+  n_methods = len(data)
+  n_cols = 2
+  n_rows = int(np.ceil(n_methods / 2.0)) # 1/2=0.5-->1, 2/2=1, 3/2=1.5-->2
+  fig, axes = plt.subplots(n_rows, n_cols, dpi=200, sharex=True, sharey=True)
+
+  for i, (method, (mean, std)) in enumerate(data.items()):
+    ax = axes[i // 2, i % 2]
     x = mean[x_name]
-    y_center = mean[y_name]
-    x, y_center = remove_outliers(x, y_center)
+    y = mean[y_name]
+    x, y = remove_outliers(x, y)
     c = method2color[method]
-    # ax.plot(x, y_center, label=method, linewidth=1.0, c=c)
-    ax.scatter(x, y_center, label=method, linewidth=1.0, color=c, s=4.0)
+    ax.scatter(x, y, color=c, s=2.0)
+    # ax.hexbin(x, y)
+    # ax.imshow(np.histogram2d(x, y, bins=1000)[0].T, origin='lower', cmap='jet')
+    ax.set_title(method)
+    ax.set_xlabel(latex_sanitize(x_name))
+    ax.set_ylabel(latex_sanitize(y_name))
     if False: # np.sum(std[column]) > 1e-5:
-      y_upper = y_center + (3 * std[column])
-      y_lower = y_center - (3 * std[column])
+      y_upper = y + (3 * std[column])
+      y_lower = y - (3 * std[column])
       ax.plot(x, y_lower, linewidth=0.6, linestyle='dashed', c=c)
       ax.plot(x, y_upper, linewidth=0.6, linestyle='dashed', c=c)
-  ax.legend()
-  ax.set_xlabel(latex_sanitize(x_name))
-  ax.set_ylabel(latex_sanitize(y_name))
+  
+  if n_methods % 2 == 1:
+    axes[-1, -1].set_visible(False)
+
   if title is not None:
-    ax.set_title(title)
+    plt.suptitle(title)
   filename = './plots/%s.png' % str(uuid.uuid1())
+  plt.tight_layout()
   plt.savefig(filename, dpi='figure')
   plt.close(fig=fig)
   return Path(filename)
 
 def generate_boxplot(data, metric, title=None):
-  fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+  fig, ax = plt.subplots(1, 1, figsize=(10, 5), dpi=200)
   x, labels, clrs = [], [], []
   for method, statistics in data.items():
+    if metric not in statistics:
+      plt.close(fig=fig)
+      return None
+
     n = statistics[metric]['n']
     if np.isnan(n) or n == 0:
       continue
@@ -229,7 +244,7 @@ def generate_boxplot(data, metric, title=None):
   ax.set_ylabel(latex_sanitize(metric))
   if title is not None:
     ax.set_title(title)
-  filename = './plots/%s.pdf' % str(uuid.uuid1())
+  filename = './plots/%s.png' % str(uuid.uuid1())
   plt.savefig(filename)
   plt.close(fig=fig)
   return Path(filename)
@@ -248,7 +263,7 @@ def is_dependent_var(s):
 
 def is_independent_var(s):
   s = s.lower()
-  keywords = ( 'xyz', 'camera angle', 'elevation' )
+  keywords = ( 'xyz', 'camera angle', 'elevation', 'baseline / altitude' )
   for kw in keywords:
     if kw in s:
       return True
@@ -288,6 +303,8 @@ for test_dir in tqdm(test_dirs):
   csv_std = parse_csv_file(test_dir / 'stats' / 'individual_results_std.csv')
   if (csv_mean is not None) and (csv_std is not None) and \
       (len(csv_mean) > 1) and (len(csv_mean) == len(csv_std)):
+    csv_mean['Baseline / Altitude'] = csv_mean['Baseline - xyz [m]'] / csv_mean['Altitude [m]']
+    csv_mean['Baseline / Altitude'] = csv_mean['Baseline - xyz [m]'] / csv_mean['Altitude [m]']
     csvs[(test_set_name, motion)][stereo_method] = (csv_mean, csv_std)
     dependent_vars = set([c for c in csv_mean.columns if is_dependent_var(c)])
     independent_vars = set([c for c in csv_mean.columns if is_independent_var(c)])
@@ -295,7 +312,7 @@ for test_dir in tqdm(test_dirs):
   all_statistics[(test_set_name, motion)][stereo_method] = stats
 
 # Generate timeseries plots and add to summary tables
-print('Generating scatter plots...')
+print('Generating plots...')
 dependent_vars = list([s.strip() for s in sorted(dependent_vars)])
 independent_vars = list([s.strip() for s in sorted(independent_vars)])
 for (test_set_name, motion), method2data in csvs.items():
@@ -305,7 +322,7 @@ for (test_set_name, motion), method2data in csvs.items():
     if indep_var not in df.columns:
       df[indep_var] = '-'
     for dep_var in dependent_vars:
-      image_path = generate_scatter_plot(method2data, indep_var, dep_var, title=title)
+      image_path = generate_plot(method2data, indep_var, dep_var, title=title)
       df[indep_var][motion][dep_var] = image_path_to_link(image_path)
   test_sets[test_set_name] = df
 
@@ -318,7 +335,8 @@ for (test_set_name, motion), stats_per_method in all_statistics.items():
     df['Boxplot'] = '-'
   for col in independent_vars + dependent_vars + ['Runtime [ms]']:
     image_path = generate_boxplot(stats_per_method, col, title=title)
-    df['Boxplot'][motion][col] = image_path_to_link(image_path)
+    if image_path is not None:
+      df['Boxplot'][motion][col] = image_path_to_link(image_path)
   test_sets[test_set_name] = df
 
 # Remove (outer) rows in each dataframe which have no data
