@@ -8,6 +8,7 @@ from pathlib import Path
 from collections import defaultdict
 import uuid
 from tqdm import tqdm
+import seaborn as sns
 
 from generate_html import render_html, image_path_to_link
 
@@ -54,16 +55,16 @@ def parse_summary_file(filepath):
       parts = line.split(',')
       if len(parts) == 9:
         metric_name = parts[0].strip()
-        n, mean, std, q00, q25, q50, q75, q100 = [float(p.strip()) for p in parts[1:]]
+        n, mean, std, lower, q25, q50, q75, upper = [float(p.strip()) for p in parts[1:]]
         stats[metric_name] = {
           'n': int(n),
           'mean': mean,
           'std': std,
-          'q00': q00,
+          'lower': lower,
           'q25': q25,
           'q50': q50,
           'q75': q75,
-          'q100': q100
+          'upper': upper
         }
   return stats
 
@@ -165,8 +166,16 @@ def remove_outliers(x, y):
   x = x[idx]
   y = y[idx]
   return x, y
-  # poly = np.polynomial.polynomial.Polynomial.fit(x, y, 1)
-  # return x, poly(x)
+
+def remove_outliers_df(df, col):
+  values = df[col]
+  q1 = values.quantile(0.25)
+  q3 = values.quantile(0.75)
+  iqr = q3 - q1
+  ymin = q1 - 1.5 * iqr
+  ymax = q3 + 1.5 * iqr
+  idx = (values >= ymin) & (values <= ymax)
+  return df[idx]
 
 def parse_csv_file(filename):
   if not filename.exists():
@@ -176,42 +185,27 @@ def parse_csv_file(filename):
 def latex_sanitize(s):
   return s.replace('%', '\%').replace('<=', '$\le$').replace('>=', '$\ge$').replace('<', '$<$').replace('>', '$>$')
 
-colors = [plt.get_cmap('Set2')(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
+palette = 'Set2'
+colors = [plt.get_cmap(palette)(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
 
 def generate_plot(data, x_name, y_name, title=None):
-  n_methods = len(data)
-  n_cols = 2
-  n_rows = int(np.ceil(n_methods / 2.0)) # 1/2=0.5-->1, 2/2=1, 3/2=1.5-->2
-  fig, axes = plt.subplots(n_rows, n_cols, dpi=200, sharex=True, sharey=True)
-
-  for i, (method, (mean, std)) in enumerate(data.items()):
-    ax = axes[i // 2, i % 2]
-    x = mean[x_name]
-    y = mean[y_name]
-    x, y = remove_outliers(x, y)
-    c = method2color[method]
-    ax.scatter(x, y, color=c, s=2.0)
-    # ax.hexbin(x, y)
-    # ax.imshow(np.histogram2d(x, y, bins=1000)[0].T, origin='lower', cmap='jet')
-    ax.set_title(method)
-    ax.set_xlabel(latex_sanitize(x_name))
-    ax.set_ylabel(latex_sanitize(y_name))
-    if False: # np.sum(std[column]) > 1e-5:
-      y_upper = y + (3 * std[column])
-      y_lower = y - (3 * std[column])
-      ax.plot(x, y_lower, linewidth=0.6, linestyle='dashed', c=c)
-      ax.plot(x, y_upper, linewidth=0.6, linestyle='dashed', c=c)
-  
-  if n_methods % 2 == 1:
-    axes[-1, -1].set_visible(False)
-
+  df = pd.DataFrame()
+  for method, (mean, std) in data.items():
+    mean['Algorithm'] = method
+    df = pd.concat([df, remove_outliers_df(mean, y_name)])
+  g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
+                    hue='Algorithm', hue_order=stereo_methods, palette=palette)
+  g.map_dataframe(sns.histplot, x=x_name, y=y_name, stat='probability', bins=(80, 80), common_bins=True)
+  g.map_dataframe(sns.kdeplot, x=x_name, y=y_name, levels=5, linewidths=0.75)
+  g.set_axis_labels(latex_sanitize(x_name), latex_sanitize(y_name))
+  g.set_titles("{col_name}")
   if title is not None:
-    plt.suptitle(title)
+    g.fig.suptitle(title)
+    g.fig.tight_layout()
   filename = './plots/%s.png' % str(uuid.uuid1())
-  plt.tight_layout()
-  plt.savefig(filename, dpi='figure')
-  plt.close(fig=fig)
+  g.savefig(filename, dpi=200)
+  plt.close('all')
   return Path(filename)
 
 def generate_boxplot(data, metric, title=None):
@@ -226,11 +220,11 @@ def generate_boxplot(data, metric, title=None):
     if np.isnan(n) or n == 0:
       continue
     quartiles = [
-      statistics[metric]['q00'],
+      statistics[metric]['lower'],
       statistics[metric]['q25'],
       statistics[metric]['q50'],
       statistics[metric]['q75'],
-      statistics[metric]['q100']
+      statistics[metric]['upper']
     ]
     x.append(quartiles)
     label = f'{method}\n[N={n}]'
@@ -255,7 +249,7 @@ def generate_boxplot(data, metric, title=None):
 
 def is_dependent_var(s):
   s = s.lower()
-  keywords = ( 'fraction estimated', 'rmse', 'error', 'fraction inliers' )
+  keywords = ( 'fraction estimated', 'rmse', 'error', 'fraction inliers', 'coverage' )
   for kw in keywords:
     if kw in s:
       return True
@@ -263,7 +257,7 @@ def is_dependent_var(s):
 
 def is_independent_var(s):
   s = s.lower()
-  keywords = ( 'xyz', 'camera angle', 'elevation', 'baseline / altitude' )
+  keywords = ( 'baseline - xyz', 'motion angle', 'altitude', 'scene variation' )
   for kw in keywords:
     if kw in s:
       return True
