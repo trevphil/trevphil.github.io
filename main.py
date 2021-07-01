@@ -9,6 +9,7 @@ from collections import defaultdict
 import uuid
 from tqdm import tqdm
 import seaborn as sns
+from scipy.stats import chi2
 
 from generate_html import render_html, image_path_to_link
 
@@ -167,15 +168,22 @@ def remove_outliers(x, y):
   y = y[idx]
   return x, y
 
-def remove_outliers_df(df, col):
-  values = df[col]
-  q1 = values.quantile(0.25)
-  q3 = values.quantile(0.75)
-  iqr = q3 - q1
-  ymin = q1 - 1.5 * iqr
-  ymax = q3 + 1.5 * iqr
-  idx = (values >= ymin) & (values <= ymax)
-  return df[idx]
+def remove_outliers_df(df, x_name, y_name):
+  data = df[[x_name, y_name]].dropna().to_numpy()
+  cov = np.cov(data, rowvar=False)
+  inv_cov = np.linalg.inv(cov)
+  centerpoint = np.mean(data, axis=0)
+  distances = []
+  for i, val in enumerate(data):
+    distance = (val - centerpoint).T.dot(inv_cov).dot(val - centerpoint)
+    distances.append(distance)
+  cutoff = chi2.ppf(0.90, data.shape[1])
+  inlier_idx = np.where(np.array(distances) < cutoff)
+  return df.iloc[inlier_idx]
+
+#################################################################
+#################################################################
+#################################################################
 
 def parse_csv_file(filename):
   if not filename.exists():
@@ -185,6 +193,10 @@ def parse_csv_file(filename):
 def latex_sanitize(s):
   return s.replace('%', '\%').replace('<=', '$\le$').replace('>=', '$\ge$').replace('<', '$<$').replace('>', '$>$')
 
+#################################################################
+#################################################################
+#################################################################
+
 palette = 'Set2'
 colors = [plt.get_cmap(palette)(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
@@ -193,11 +205,14 @@ def generate_plot(data, x_name, y_name, title=None):
   df = pd.DataFrame()
   for method, (mean, std) in data.items():
     mean['Algorithm'] = method
-    df = pd.concat([df, remove_outliers_df(mean, y_name)])
+    if 'rmse' in y_name.lower():
+      df = pd.concat([df, remove_outliers_df(mean, x_name, y_name)])
+    else:
+      df = pd.concat([df, mean])
   g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
                     hue='Algorithm', hue_order=stereo_methods, palette=palette)
-  g.map_dataframe(sns.histplot, x=x_name, y=y_name, stat='probability', bins=(80, 80), common_bins=True)
-  g.map_dataframe(sns.kdeplot, x=x_name, y=y_name, levels=5, linewidths=0.75)
+  g.map_dataframe(sns.histplot, x=x_name, y=y_name, stat='probability', bins=(60, 60), common_bins=True)
+  g.map_dataframe(sns.kdeplot, x=x_name, y=y_name, cut=0, levels=5, linewidths=0.75)
   g.set_axis_labels(latex_sanitize(x_name), latex_sanitize(y_name))
   g.set_titles("{col_name}")
   if title is not None:
@@ -262,6 +277,10 @@ def is_independent_var(s):
     if kw in s:
       return True
   return False
+
+#################################################################
+#################################################################
+#################################################################
 
 test_sets = defaultdict(lambda: make_dataframe())  # Test set name --> table of results (dataframe)
 csvs = defaultdict(lambda: dict())  # (test set, motion) --> dict from (method name --> csvs)
