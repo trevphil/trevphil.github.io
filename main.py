@@ -201,14 +201,51 @@ palette = 'Set2'
 colors = [plt.get_cmap(palette)(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
 
+def plot_failures(data, x_name, title=None):
+  df = pd.DataFrame()
+  for method, this_df in data.items():
+    this_df['Algorithm'] = method
+    df = pd.concat([df, this_df])
+  # df = df[df['Failure'] == 1]  # Filter ONLY failures
+
+  # The "weight" of each sample will be weighted inversely proportional
+  # to how often the "x value" (on x-axis) of the sample occurs when using the
+  # pre-defined binning. This is to normalize for the Monte Carlo sampling bias.
+  num_bins = 30
+  x_values = df[x_name].to_numpy()
+  assert (not np.isnan(x_values).any())
+  assert (not (x_values == -1.0).any())
+  counts, bins = np.histogram(x_values, bins=num_bins, density=False)
+  x_bins = np.digitize(x_values, bins, right=False) - 1
+  x_bins = np.clip(0, counts.size - 1, x_bins)
+  weights = counts[x_bins] / float(np.sum(counts))
+  # Invert weight --> x-values with more samples have less weight
+  df['Weights'] = 1.0 / weights
+  df = df[df['Failure'] == 1]  # Filter ONLY failures
+
+  g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
+                    hue='Algorithm', hue_order=stereo_methods, palette=palette)
+  g.map_dataframe(sns.histplot, x=x_name, weights='Weights', stat='count',
+                  bins=bins) # num_bins, common_bins=True)
+  g.set_axis_labels(latex_sanitize(x_name), 'Failure PDF')
+  g.set_titles("{col_name}")
+  if title is not None:
+    g.fig.suptitle(title)
+    g.fig.tight_layout()
+  filename = './plots/%s.png' % str(uuid.uuid1())
+  g.savefig(filename, dpi=200)
+  plt.close('all')
+  return Path(filename)
+
 def generate_plot(data, x_name, y_name, title=None):
   df = pd.DataFrame()
-  for method, (mean, std) in data.items():
-    mean['Algorithm'] = method
+  for method, this_df in data.items():
+    this_df['Algorithm'] = method
+    this_df = this_df[this_df['Failure'] == 0]  # Filter out failures
     if 'rmse' in y_name.lower():
-      df = pd.concat([df, remove_outliers_df(mean, x_name, y_name)])
+      df = pd.concat([df, remove_outliers_df(this_df, x_name, y_name)])
     else:
-      df = pd.concat([df, mean])
+      df = pd.concat([df, this_df])
   g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
                     hue='Algorithm', hue_order=stereo_methods, palette=palette)
   g.map_dataframe(sns.histplot, x=x_name, y=y_name, stat='probability', bins=(60, 60), common_bins=True)
@@ -272,7 +309,7 @@ def is_dependent_var(s):
 
 def is_independent_var(s):
   s = s.lower()
-  keywords = ( 'baseline - xyz', 'motion angle', 'altitude', 'scene variation' )
+  keywords = ( 'motion angle', 'baseline / altitude', 'height variation / altitude' )
   for kw in keywords:
     if kw in s:
       return True
@@ -312,15 +349,13 @@ for test_dir in tqdm(test_dirs):
   if len(depth_image_files) == 1:
     df[stereo_method][motion]['Debug depth'] = image_path_to_link(depth_image_files[0])
 
-  csv_mean = parse_csv_file(test_dir / 'stats' / 'individual_results_mean.csv')
-  csv_std = parse_csv_file(test_dir / 'stats' / 'individual_results_std.csv')
-  if (csv_mean is not None) and (csv_std is not None) and \
-      (len(csv_mean) > 1) and (len(csv_mean) == len(csv_std)):
-    csv_mean['Baseline / Altitude'] = csv_mean['Baseline - xyz [m]'] / csv_mean['Altitude [m]']
-    csv_mean['Baseline / Altitude'] = csv_mean['Baseline - xyz [m]'] / csv_mean['Altitude [m]']
-    csvs[(test_set_name, motion)][stereo_method] = (csv_mean, csv_std)
-    dependent_vars = set([c for c in csv_mean.columns if is_dependent_var(c)])
-    independent_vars = set([c for c in csv_mean.columns if is_independent_var(c)])
+  tseries = parse_csv_file(test_dir / 'stats' / 'individual_results.csv')
+  if (tseries is not None) and (len(tseries) > 1):
+    tseries['Baseline / Altitude'] = tseries['Baseline - xyz [m]'] / tseries['Altitude [m]']
+    tseries['Height variation / Altitude'] = tseries['Height variation [m]'] / tseries['Altitude [m]']
+    csvs[(test_set_name, motion)][stereo_method] = tseries
+    dependent_vars = set([c for c in tseries.columns if is_dependent_var(c)])
+    independent_vars = set([c for c in tseries.columns if is_independent_var(c)])
   
   all_statistics[(test_set_name, motion)][stereo_method] = stats
 
@@ -334,6 +369,8 @@ for (test_set_name, motion), method2data in csvs.items():
   for indep_var in independent_vars:
     if indep_var not in df.columns:
       df[indep_var] = '-'
+    # image_path = plot_failures(method2data, indep_var, title=title)
+    # df[indep_var][motion]['Failure'] = image_path_to_link(image_path)
     for dep_var in dependent_vars:
       image_path = generate_plot(method2data, indep_var, dep_var, title=title)
       df[indep_var][motion][dep_var] = image_path_to_link(image_path)
