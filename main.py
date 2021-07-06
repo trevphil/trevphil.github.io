@@ -10,6 +10,7 @@ import uuid
 from tqdm import tqdm
 import seaborn as sns
 from scipy.stats import chi2
+import textwrap
 
 from generate_html import render_html, image_path_to_link
 
@@ -191,7 +192,12 @@ def parse_csv_file(filename):
   return pd.read_csv(filename, skipinitialspace=True)
 
 def latex_sanitize(s):
-  return s.replace('%', '\%').replace('<=', '$\le$').replace('>=', '$\ge$').replace('<', '$<$').replace('>', '$>$')
+  return s\
+    .replace('%', '\%')\
+    .replace('<=', '$\le$')\
+    .replace('>=', '$\ge$')\
+    .replace('<', '$<$')\
+    .replace('>', '$>$')
 
 #################################################################
 #################################################################
@@ -200,42 +206,6 @@ def latex_sanitize(s):
 palette = 'Set2'
 colors = [plt.get_cmap(palette)(1. * i / len(stereo_methods)) for i in range(len(stereo_methods))]
 method2color = dict(zip(stereo_methods, colors))
-
-def plot_failures(data, x_name, title=None):
-  df = pd.DataFrame()
-  for method, this_df in data.items():
-    this_df['Algorithm'] = method
-    df = pd.concat([df, this_df])
-  # df = df[df['Failure'] == 1]  # Filter ONLY failures
-
-  # The "weight" of each sample will be weighted inversely proportional
-  # to how often the "x value" (on x-axis) of the sample occurs when using the
-  # pre-defined binning. This is to normalize for the Monte Carlo sampling bias.
-  num_bins = 30
-  x_values = df[x_name].to_numpy()
-  assert (not np.isnan(x_values).any())
-  assert (not (x_values == -1.0).any())
-  counts, bins = np.histogram(x_values, bins=num_bins, density=False)
-  x_bins = np.digitize(x_values, bins, right=False) - 1
-  x_bins = np.clip(0, counts.size - 1, x_bins)
-  weights = counts[x_bins] / float(np.sum(counts))
-  # Invert weight --> x-values with more samples have less weight
-  df['Weights'] = 1.0 / weights
-  df = df[df['Failure'] == 1]  # Filter ONLY failures
-
-  g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
-                    hue='Algorithm', hue_order=stereo_methods, palette=palette)
-  g.map_dataframe(sns.histplot, x=x_name, weights='Weights', stat='count',
-                  bins=bins) # num_bins, common_bins=True)
-  g.set_axis_labels(latex_sanitize(x_name), 'Failure PDF')
-  g.set_titles("{col_name}")
-  if title is not None:
-    g.fig.suptitle(title)
-    g.fig.tight_layout()
-  filename = './plots/%s.png' % str(uuid.uuid1())
-  g.savefig(filename, dpi=200)
-  plt.close('all')
-  return Path(filename)
 
 def generate_plot(data, x_name, y_name, title=None):
   df = pd.DataFrame()
@@ -295,6 +265,27 @@ def generate_boxplot(data, metric, title=None):
   plt.close(fig=fig)
   return Path(filename)
 
+def plot_failures(data, x_name, title=None):
+  df = pd.DataFrame()
+  for method, this_df in data.items():
+    this_df['Algorithm'] = textwrap.fill(method, 14)
+    df = pd.concat([df, this_df])
+
+  ax = sns.violinplot(data=df, x='Algorithm', y=x_name, hue='Failure',
+                      split=True, inner='quartile', linewidth=0.8,
+                      scale='count', scale_hue=False, cut=0,
+                      palette={1: 'indianred', 0: 'lightgreen'})
+  ax.set_axisbelow(True)
+  ax.yaxis.grid(color='gray', lw=0.25)
+  if title is not None:
+    ax.set_title(title)
+  plt.tight_layout()
+
+  filename = './plots/%s.png' % str(uuid.uuid1())
+  plt.savefig(filename, dpi=200)
+  plt.close('all')
+  return Path(filename)
+
 #################################################################
 #################################################################
 #################################################################
@@ -309,7 +300,7 @@ def is_dependent_var(s):
 
 def is_independent_var(s):
   s = s.lower()
-  keywords = ( 'motion angle', 'baseline / altitude', 'height variation / altitude' )
+  keywords = ( 'motion angle', 'baseline / altitude', 'depth variation / altitude' )
   for kw in keywords:
     if kw in s:
       return True
@@ -352,7 +343,7 @@ for test_dir in tqdm(test_dirs):
   tseries = parse_csv_file(test_dir / 'stats' / 'individual_results.csv')
   if (tseries is not None) and (len(tseries) > 1):
     tseries['Baseline / Altitude'] = tseries['Baseline - xyz [m]'] / tseries['Altitude [m]']
-    tseries['Height variation / Altitude'] = tseries['Height variation [m]'] / tseries['Altitude [m]']
+    tseries['Depth variation / Altitude'] = tseries['Depth variation [m]'] / tseries['Altitude [m]']
     csvs[(test_set_name, motion)][stereo_method] = tseries
     dependent_vars = set([c for c in tseries.columns if is_dependent_var(c)])
     independent_vars = set([c for c in tseries.columns if is_independent_var(c)])
@@ -369,8 +360,8 @@ for (test_set_name, motion), method2data in csvs.items():
   for indep_var in independent_vars:
     if indep_var not in df.columns:
       df[indep_var] = '-'
-    # image_path = plot_failures(method2data, indep_var, title=title)
-    # df[indep_var][motion]['Failure'] = image_path_to_link(image_path)
+    image_path = plot_failures(method2data, indep_var, title=title)
+    df[indep_var][motion]['Failure'] = image_path_to_link(image_path)
     for dep_var in dependent_vars:
       image_path = generate_plot(method2data, indep_var, dep_var, title=title)
       df[indep_var][motion][dep_var] = image_path_to_link(image_path)
