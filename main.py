@@ -139,6 +139,8 @@ tmp_stats = parse_summary_file(test_dirs[0] / 'stats'/ 'summary.txt')
 stat_names = set(tmp_stats.keys())
 stat_names.add('Debug stereo')
 stat_names.add('Debug depth')
+stat_names.add('Baseline / Altitude')
+stat_names.add('Depth variation / Altitude')
 stat_names = list(sorted(stat_names))
 
 #################################################################
@@ -270,13 +272,30 @@ def plot_failures(data, x_name, title=None):
   for method, this_df in data.items():
     this_df['Algorithm'] = textwrap.fill(method, 14)
     df = pd.concat([df, this_df])
+  split = False if (df['Failure'].to_numpy() == 0).all() else True
 
   ax = sns.violinplot(data=df, x='Algorithm', y=x_name, hue='Failure',
-                      split=True, inner='quartile', linewidth=0.8,
+                      split=split, inner='quartile', linewidth=0.8,
                       scale='count', scale_hue=False, cut=0,
                       palette={1: 'indianred', 0: 'lightgreen'})
   ax.set_axisbelow(True)
   ax.yaxis.grid(color='gray', lw=0.25)
+  if title is not None:
+    ax.set_title(title)
+  plt.tight_layout()
+
+  filename = './plots/%s.png' % str(uuid.uuid1())
+  plt.savefig(filename, dpi=200)
+  plt.close('all')
+  return Path(filename)
+
+def plot_univariate_hist(data, x_name, title=None):
+  df = pd.DataFrame()
+  for _, this_df in data.items():
+    df = pd.concat([df, this_df])
+  ax = sns.histplot(df, x=x_name, stat='density', bins=60)
+  ax.set_xlabel(latex_sanitize(x_name))
+  ax.set_ylabel('Density')
   if title is not None:
     ax.set_title(title)
   plt.tight_layout()
@@ -360,11 +379,20 @@ for (test_set_name, motion), method2data in csvs.items():
   for indep_var in independent_vars:
     if indep_var not in df.columns:
       df[indep_var] = '-'
-    image_path = plot_failures(method2data, indep_var, title=title)
-    df[indep_var][motion]['Failure'] = image_path_to_link(image_path)
+  
+    failure_plot = plot_failures(method2data, indep_var, title=title)
+    if failure_plot is not None:
+      df[indep_var][motion]['Failure'] = image_path_to_link(failure_plot)
+
+    hist_plot = plot_univariate_hist(method2data, indep_var, title=title)
+    if hist_plot is not None:
+      df[indep_var][motion][indep_var] = image_path_to_link(hist_plot)
+
     for dep_var in dependent_vars:
       image_path = generate_plot(method2data, indep_var, dep_var, title=title)
-      df[indep_var][motion][dep_var] = image_path_to_link(image_path)
+      if image_path is not None:
+        df[indep_var][motion][dep_var] = image_path_to_link(image_path)
+
   test_sets[test_set_name] = df
 
 # Generate box-whisker plots and add to summary tables
