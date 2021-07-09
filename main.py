@@ -139,8 +139,8 @@ tmp_stats = parse_summary_file(test_dirs[0] / 'stats'/ 'summary.txt')
 stat_names = set(tmp_stats.keys())
 stat_names.add('Debug stereo')
 stat_names.add('Debug depth')
-stat_names.add('Baseline / Altitude')
-stat_names.add('Depth variation / Altitude')
+stat_names.add('Baseline / altitude')
+stat_names.add('Depth variation / altitude')
 stat_names = list(sorted(stat_names))
 
 #################################################################
@@ -221,7 +221,7 @@ def generate_plot(data, x_name, y_name, title=None):
   g = sns.FacetGrid(df, col='Algorithm', col_order=stereo_methods, col_wrap=3,
                     hue='Algorithm', hue_order=stereo_methods, palette=palette)
   g.map_dataframe(sns.histplot, x=x_name, y=y_name, stat='probability', bins=(60, 60), common_bins=True)
-  g.map_dataframe(sns.kdeplot, x=x_name, y=y_name, cut=0, levels=5, linewidths=0.75)
+  # g.map_dataframe(sns.kdeplot, x=x_name, y=y_name, cut=0, levels=5, linewidths=0.75)
   g.set_axis_labels(latex_sanitize(x_name), latex_sanitize(y_name))
   g.set_titles("{col_name}")
   if title is not None:
@@ -361,8 +361,8 @@ for test_dir in tqdm(test_dirs):
 
   tseries = parse_csv_file(test_dir / 'stats' / 'individual_results.csv')
   if (tseries is not None) and (len(tseries) > 1):
-    tseries['Baseline / Altitude'] = tseries['Baseline - xyz [m]'] / tseries['Altitude [m]']
-    tseries['Depth variation / Altitude'] = tseries['Depth variation [m]'] / tseries['Altitude [m]']
+    tseries['Baseline / altitude'] = tseries['Baseline - xyz [m]'] / tseries['Altitude [m]']
+    tseries['Depth variation / altitude'] = tseries['Depth variation [m]'] / tseries['Altitude [m]']
     csvs[(test_set_name, motion)][stereo_method] = tseries
     dependent_vars = set([c for c in tseries.columns if is_dependent_var(c)])
     independent_vars = set([c for c in tseries.columns if is_independent_var(c)])
