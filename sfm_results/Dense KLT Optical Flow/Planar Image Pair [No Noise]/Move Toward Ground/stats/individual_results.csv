@@ -1,0 +1,2 @@
+Frame ID,Altitude [m],Baseline - x [m],Baseline - xyz [m],Baseline - y [m],Baseline - z [m],Coverage,Depth variation [m],Failure,Fraction estimated px,Fraction inliers (error <= 1%),Fraction outliers (error > 1%),Max abs. error [m],Mean G.T. relative error,Median abs. error [m],Motion angle [deg],Outliers / inliers,RMSE [m],Runtime [ms]
+0,4.99839,0,0.2,0,0.2,0.859372,0.000955397,0,0.653617,0.703916,0.296084,0.639903,0.00864653,0.0346266,90,0.420624,0.0672745,172
